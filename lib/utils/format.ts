@@ -84,7 +84,7 @@ export function formatCompactNumber(value: number | string): string {
  * Get block explorer URL for transaction
  */
 export function getExplorerTxUrl(txHash: string): string {
-    const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://sepolia.basescan.org';
+    const explorerUrl = process.env.NEXT_PUBLIC_EXPLORER_URL || 'https://sepolia.mantlescan.xyz';
     return `${explorerUrl}/tx/${txHash}`;
 }
 

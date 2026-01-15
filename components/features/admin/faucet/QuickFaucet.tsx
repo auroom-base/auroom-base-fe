@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useAccount } from 'wagmi';
 import { parseUnits } from 'viem';
 import { useMintToken } from '@/hooks/admin/useMintToken';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Sparkles, CheckCircle2, AlertCircle } from 'lucide-react';

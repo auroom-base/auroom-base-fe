@@ -3,11 +3,11 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { Copy, ExternalLink, FileJson } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
-const EXPLORER_URL = "https://sepolia.basescan.org";
+const EXPLORER_URL = "https://sepolia.mantlescan.xyz";
 
 interface ContractInfo {
     name: string;

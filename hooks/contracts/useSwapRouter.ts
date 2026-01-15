@@ -1,6 +1,6 @@
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { SwapRouterABI } from '@/lib/contracts/abis';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { calculateDeadline } from '@/lib/utils/calculations';
 import type { Address } from 'viem';
 

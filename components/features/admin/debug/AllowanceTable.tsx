@@ -3,7 +3,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useTokenAllowance } from '@/hooks/contracts/useTokenAllowance';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { TOKENS } from '@/lib/contracts/tokens';
 import { formatUnits } from 'viem';
 import { useAccount } from 'wagmi';

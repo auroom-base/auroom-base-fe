@@ -1,6 +1,6 @@
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { UniswapV2RouterABI } from '@/lib/contracts/abis/UniswapV2Router';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 
 export interface AddLiquidityParams {
     tokenA: `0x${string}`;

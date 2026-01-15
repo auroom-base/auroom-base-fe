@@ -4,18 +4,39 @@ import { useAccount } from 'wagmi';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
-import { CheckCircle2, XCircle, Shield } from 'lucide-react';
 import { useIdentityRegistry } from '@/hooks/contracts/useIdentityRegistry';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { isValidAddress } from '@/lib/utils/validation';
 import type { Address } from 'viem';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
 
 export default function VerifyPage() {
     const { address, isConnected } = useAccount();
     const [addressToRegister, setAddressToRegister] = useState('');
+    const containerRef = useRef<HTMLDivElement>(null);
 
     const { useIsVerified, registerIdentity, isPending, isConfirming, isSuccess, error } = useIdentityRegistry();
     const { data: isVerified, isLoading } = useIsVerified(address);
+
+    useGSAP(() => {
+        const tl = gsap.timeline();
+
+        tl.from('.hero-section', {
+            y: 50,
+            opacity: 0,
+            duration: 1,
+            ease: 'power3.out'
+        })
+            .from('.status-card', {
+                y: 30,
+                opacity: 0,
+                duration: 0.8,
+                ease: 'power2.out',
+                stagger: 0.2
+            }, '-=0.5');
+
+    }, { scope: containerRef });
 
     const handleRegister = () => {
         if (isValidAddress(addressToRegister)) {
@@ -24,125 +45,157 @@ export default function VerifyPage() {
     };
 
     return (
-        <div className="min-h-screen bg-black py-12">
-            <div className="container mx-auto px-4">
-                <div className="max-w-2xl mx-auto space-y-6">
-                    {/* Page Title */}
-                    <div className="text-center mb-8">
-                        <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 bg-clip-text text-transparent mb-2 flex items-center justify-center gap-2">
-                            <Shield className="h-8 w-8 text-yellow-500" />
-                            Verification
+        <div ref={containerRef} className="min-h-screen bg-black py-16 relative overflow-hidden">
+            {/* Background Gradients */}
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-yellow-500/10 blur-[120px] rounded-full pointer-events-none" />
+
+            <div className="container mx-auto px-4 relative z-10">
+                <div className="max-w-3xl mx-auto space-y-12">
+                    {/* Hero Section */}
+                    <div className="hero-section text-center space-y-6">
+                        <div className="relative w-32 h-32 mx-auto mb-6">
+                            {/* Abstract Security Illustration */}
+                            <img
+                                src="https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&q=80&w=400"
+                                alt="Security Shield"
+                                className="w-full h-full object-cover rounded-2xl shadow-2xl shadow-yellow-500/20 rotate-3 hover:rotate-0 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-2xl" />
+                        </div>
+
+                        <h1 className="text-4xl md:text-5xl font-bold text-white tracking-tight">
+                            Identity <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-600">Verification</span>
                         </h1>
-                        <p className="text-white/60">KYC verification is required to use the protocol</p>
+                        <p className="text-lg text-white/60 max-w-lg mx-auto leading-relaxed">
+                            Complete your KYC verification to unlock the full potential of the AuRoom protocol. Secure, fast, and reliable.
+                        </p>
                     </div>
 
-                    {/* Verification Status */}
-                    <div className="p-6 rounded-2xl bg-zinc-900 border-2 border-yellow-500/30">
-                        <h2 className="text-xl font-bold text-white mb-4">Verification Status</h2>
-                        {!isConnected ? (
-                            <div className="text-center py-8">
-                                <p className="text-white/60">
-                                    Please connect your wallet to check verification status
-                                </p>
-                            </div>
-                        ) : isLoading ? (
-                            <div className="text-center py-8">
-                                <p className="text-white/60">Checking verification status...</p>
-                            </div>
-                        ) : (
-                            <div className="space-y-4">
-                                <div className="flex items-center justify-between p-4 border border-white/10 rounded-lg bg-black/30">
-                                    <div>
-                                        <div className="font-medium text-white">Your Address</div>
-                                        <div className="text-sm text-white/60 font-mono">
-                                            {address}
-                                        </div>
-                                    </div>
-                                    <Badge
-                                        variant={isVerified ? 'default' : 'destructive'}
-                                        className={`flex items-center gap-1 ${isVerified
-                                                ? 'bg-green-500/20 text-green-400 border-green-500/30'
-                                                : 'bg-red-500/20 text-red-400 border-red-500/30'
-                                            }`}
-                                    >
+                    {/* Verification Status Card */}
+                    <div className="status-card relative group">
+                        <div className="absolute -inset-0.5 bg-gradient-to-b from-yellow-500/20 to-transparent rounded-3xl blur opacity-50 group-hover:opacity-75 transition-opacity" />
+                        <div className="relative p-8 rounded-3xl bg-zinc-900/80 backdrop-blur-xl border border-white/10">
+
+                            <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-8">
+                                <div className="text-center md:text-left">
+                                    <h2 className="text-2xl font-bold text-white mb-2">Account Status</h2>
+                                    <p className="text-white/60">Current verification level</p>
+                                </div>
+
+                                {!isConnected ? (
+                                    <Badge variant="outline" className="px-4 py-2 border-white/10 bg-white/5 text-white">
+                                        Wallet Not Connected
+                                    </Badge>
+                                ) : isLoading ? (
+                                    <Badge variant="outline" className="px-4 py-2 border-yellow-500/30 bg-yellow-500/10 text-yellow-400 animate-pulse">
+                                        Checking Status...
+                                    </Badge>
+                                ) : (
+                                    <div className={`px-6 py-3 rounded-xl border flex items-center gap-3 ${isVerified
+                                            ? 'bg-green-500/10 border-green-500/20 text-green-400'
+                                            : 'bg-red-500/10 border-red-500/20 text-red-400'
+                                        }`}>
                                         {isVerified ? (
                                             <>
-                                                <CheckCircle2 className="h-3 w-3" />
-                                                Verified
+                                                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                                                <span className="font-semibold">Verified & Secure</span>
                                             </>
                                         ) : (
                                             <>
-                                                <XCircle className="h-3 w-3" />
-                                                Not Verified
+                                                <div className="w-2 h-2 rounded-full bg-red-500" />
+                                                <span className="font-semibold">Action Required</span>
                                             </>
                                         )}
-                                    </Badge>
-                                </div>
-
-                                {!isVerified && (
-                                    <div className="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
-                                        <p className="text-sm text-yellow-400">
-                                            Your address is not verified. Please contact the protocol admin to complete KYC verification.
-                                        </p>
-                                    </div>
-                                )}
-
-                                {isVerified && (
-                                    <div className="p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-                                        <p className="text-sm text-green-400">
-                                            Your address is verified! You can now use all protocol features.
-                                        </p>
                                     </div>
                                 )}
                             </div>
-                        )}
+
+                            {isConnected && (
+                                <div className="space-y-4">
+                                    <div className="p-4 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between">
+                                        <div className="text-sm text-white/40">Connected Address</div>
+                                        <div className="font-mono text-white/80 text-sm truncate max-w-[200px] md:max-w-none">
+                                            {address}
+                                        </div>
+                                    </div>
+
+                                    {!isVerified && (
+                                        <div className="p-6 rounded-2xl bg-gradient-to-r from-yellow-500/10 to-transparent border border-yellow-500/10">
+                                            <div className="flex gap-4">
+                                                <div className="flex-1">
+                                                    <h3 className="text-yellow-400 font-semibold mb-2">Verification Needed</h3>
+                                                    <p className="text-white/60 text-sm leading-relaxed">
+                                                        Your address requires verification to access borrowing features. Please contact our support team or the protocol administrator to initiate the KYC process.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+
+                                    {isVerified && (
+                                        <div className="p-6 rounded-2xl bg-gradient-to-r from-green-500/10 to-transparent border border-green-500/10">
+                                            <div className="flex gap-4">
+                                                <div className="flex-1">
+                                                    <h3 className="text-green-400 font-semibold mb-2">You're All Set!</h3>
+                                                    <p className="text-white/60 text-sm leading-relaxed">
+                                                        Your identity has been verified. You now have unrestricted access to collateralize assets and request loans.
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
                     </div>
 
-                    {/* Admin Panel */}
+                    {/* Admin Panel (Conditional) */}
                     {isConnected && (
-                        <div className="p-6 rounded-2xl bg-zinc-900 border-2 border-yellow-500/30">
-                            <h2 className="text-xl font-bold text-white mb-2">Admin Panel</h2>
-                            <p className="text-sm text-white/60 mb-4">Register new addresses (admin only)</p>
-                            <div className="space-y-4">
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-white">Address to Register</label>
-                                    <Input
-                                        type="text"
-                                        placeholder="0x..."
-                                        value={addressToRegister}
-                                        onChange={(e) => setAddressToRegister(e.target.value)}
-                                        className="bg-black border-white/20 text-white placeholder:text-white/40"
-                                    />
+                        <div className="status-card border-t border-white/10 pt-12">
+                            <div className="max-w-xl mx-auto">
+                                <div className="text-center mb-6">
+                                    <h3 className="text-lg font-semibold text-white/80">Admin Controls</h3>
+                                    <p className="text-sm text-white/40">Restricted to protocol administrators</p>
                                 </div>
 
-                                <Button
-                                    className="w-full bg-gradient-to-r from-yellow-500 to-amber-500 hover:from-yellow-400 hover:to-amber-400 text-black font-semibold"
-                                    onClick={handleRegister}
-                                    disabled={
-                                        !addressToRegister ||
-                                        !isValidAddress(addressToRegister) ||
-                                        isPending ||
-                                        isConfirming
-                                    }
-                                >
-                                    {isPending || isConfirming ? 'Registering...' : 'Register Address'}
-                                </Button>
-
-                                {isSuccess && (
-                                    <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-lg text-sm text-green-400">
-                                        Address registered successfully!
+                                <div className="p-6 rounded-3xl bg-zinc-900 border border-white/5 space-y-4">
+                                    <div className="space-y-2">
+                                        <label className="text-xs font-medium text-white/60 uppercase tracking-wider pl-1">Register Address</label>
+                                        <div className="flex gap-2">
+                                            <Input
+                                                type="text"
+                                                placeholder="0x..."
+                                                value={addressToRegister}
+                                                onChange={(e) => setAddressToRegister(e.target.value)}
+                                                className="bg-black/50 border-white/10 text-white placeholder:text-white/20 h-12"
+                                            />
+                                        </div>
                                     </div>
-                                )}
 
-                                {error && (
-                                    <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-lg text-sm text-red-400">
-                                        Error: {error.message}
-                                    </div>
-                                )}
+                                    <Button
+                                        className="w-full h-12 bg-white text-black hover:bg-gray-200 font-bold text-sm"
+                                        onClick={handleRegister}
+                                        disabled={
+                                            !addressToRegister ||
+                                            !isValidAddress(addressToRegister) ||
+                                            isPending ||
+                                            isConfirming
+                                        }
+                                    >
+                                        {isPending || isConfirming ? 'Processing Transaction...' : 'Register Identity'}
+                                    </Button>
 
-                                <div className="p-3 bg-blue-500/10 border border-blue-500/30 rounded-lg text-sm text-blue-400">
-                                    <p className="font-medium mb-1">Note:</p>
-                                    <p>Only the contract deployer can register new addresses. If you're not the admin, this function will fail.</p>
+                                    {isSuccess && (
+                                        <div className="text-center text-sm text-green-400 pt-2">
+                                            Successfully registered address
+                                        </div>
+                                    )}
+
+                                    {error && (
+                                        <div className="text-center text-sm text-red-400 pt-2 bg-red-500/10 p-2 rounded">
+                                            {error.message}
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>

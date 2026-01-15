@@ -34,7 +34,7 @@ export function LiveStats() {
                         Live <span className="bg-gradient-to-r from-yellow-400 via-yellow-500 to-amber-500 bg-clip-text text-transparent">Protocol Stats</span>
                     </h2>
                     <p className="text-lg text-white/70">
-                        Real-time data from AuRoom smart contracts on Base Sepolia
+                        Real-time data from AuRoom smart contracts on Mantle Sepolia
                     </p>
                 </div>
 

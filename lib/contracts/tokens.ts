@@ -1,4 +1,4 @@
-import { BASE_CONTRACTS as CONTRACTS } from './base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from './mantle_addresses';
 
 export const TOKENS = {
     IDRX: {

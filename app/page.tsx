@@ -1,10 +1,10 @@
 // V2 Landing Page - Pinjam Tunai Focus
-import { HeroSection } from '@/components/landing/v2/HeroSection';
-import { ProblemSolutionSection } from '@/components/landing/v2/ProblemSolutionSection';
-import { HowItWorksSection } from '@/components/landing/v2/HowItWorksSection';
-import { BenefitsSection } from '@/components/landing/v2/BenefitsSection';
-import { TrustSection } from '@/components/landing/v2/TrustSection';
-import { FAQSection } from '@/components/landing/v2/FAQSection';
+import { HeroSection } from '@/components/landing/v3/HeroSection';
+import { ProblemSolutionSection } from '@/components/landing/v3/ProblemSolutionSection';
+import { HowItWorksSection } from '@/components/landing/v3/HowItWorksSection';
+import { BenefitsSection } from '@/components/landing/v3/BenefitsSection';
+import { TrustSection } from '@/components/landing/v3/TrustSection';
+import { FAQSection } from '@/components/landing/v3/FAQSection';
 import { CTASection } from '@/components/landing/v2/CTASection';
 
 export default function HomePage() {

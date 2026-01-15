@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi';
 import { parseUnits, isAddress } from 'viem';
 import { useMintToken } from '@/hooks/admin/useMintToken';
 import { useCheckOwner } from '@/hooks/admin/useCheckOwner';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';

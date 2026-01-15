@@ -4,7 +4,7 @@
 'use client';
 
 import { useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { BASE_CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import MockIDRXV2ABI from '@/lib/contracts/abis/MockIDRXV2.json';
 
 export function useBurnWithAccountNumber() {
@@ -16,7 +16,7 @@ export function useBurnWithAccountNumber() {
 
     const burn = (amount: bigint, accountNumber: string) => {
         writeContract({
-            address: BASE_CONTRACTS.IDRX,
+            address: MANTLE_CONTRACTS.IDRX,
             abi: MockIDRXV2ABI,
             functionName: 'burnWithAccountNumber',
             args: [amount, accountNumber],

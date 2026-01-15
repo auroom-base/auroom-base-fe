@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import '@rainbow-me/rainbowkit/styles.css';
-import { Header } from "@/components/layout/Header";
+import { Header } from "@/components/layout/v2/Header";
 import { Footer } from "@/components/layout/Footer";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { OnboardingModal } from "@/components/shared/OnboardingModal";
@@ -60,14 +60,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black overscroll-none`}
       >
         <ClientProviders>
           <div className="flex min-h-screen flex-col">
             <Header />
             <main className="flex-1 pb-20 md:pb-0">{children}</main>
             <Footer />
-            <BottomNavigation />
+            {/* <BottomNavigation /> */}
             <OnboardingModal />
           </div>
         </ClientProviders>

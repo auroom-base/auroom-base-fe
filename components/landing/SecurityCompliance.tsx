@@ -83,7 +83,7 @@ export function SecurityCompliance() {
                         <div className="text-sm space-y-2 text-white/80">
                             <p>⏳ Professional audit planned for mainnet launch</p>
                             <p>Currently: Internal testing complete (106/106 tests passing)</p>
-                            <p>Testnet: Base Sepolia deployment</p>
+                            <p>Testnet: Mantle Sepolia deployment</p>
                         </div>
                         <div className="pt-2">
                             <Button
@@ -93,7 +93,7 @@ export function SecurityCompliance() {
                                 className="border-yellow-500/30 bg-yellow-500/10 text-yellow-400 hover:bg-yellow-500/20 hover:text-yellow-300"
                             >
                                 <Link
-                                    href="https://sepolia.basescan.org/address/0xd92cE2F13509840B1203D35218227559E64fbED0"
+                                    href="https://sepolia.mantlescan.xyz/address/0xb38139e077621421eba724008bB33C10996E6435"
                                     target="_blank"
                                     rel="noopener noreferrer"
                                 >

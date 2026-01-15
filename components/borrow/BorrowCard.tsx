@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { useIDRXAllowance, useIDRXApprove } from '@/hooks/contracts/useXAUTApproval';
 import { useBorrow, useRepay, useRepayFull, usePreviewBorrow } from '@/hooks/contracts/useBorrowingProtocol';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { parseAmount, formatAmount, formatIDR, formatLTV } from '@/lib/utils/borrow';
 import { useToast } from '@/hooks/use-toast';
 

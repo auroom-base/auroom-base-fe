@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useReadContract } from 'wagmi';
 import { formatUnits } from 'viem';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 
 interface LandingStats {
     // Borrowing Protocol Stats (V2)

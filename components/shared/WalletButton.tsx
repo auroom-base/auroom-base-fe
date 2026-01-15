@@ -40,7 +40,7 @@ export function WalletButton() {
                                     <button
                                         onClick={openConnectModal}
                                         type="button"
-                                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
+                                        className="w-full py-6 inline-flex items-center justify-center text-xl md:text-sm font-bold whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4"
                                     >
                                         Connect Wallet
                                     </button>
@@ -52,7 +52,7 @@ export function WalletButton() {
                                     <button
                                         onClick={openChainModal}
                                         type="button"
-                                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4 py-2"
+                                        className="w-full py-6 inline-flex items-center justify-center whitespace-nowrap rounded-md text-xl md:text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground hover:bg-destructive/90 h-10 px-4"
                                     >
                                         Wrong network
                                     </button>
@@ -60,11 +60,11 @@ export function WalletButton() {
                             }
 
                             return (
-                                <div className="flex gap-2">
+                                <div className="flex flex-row gap-2">
                                     <button
                                         onClick={openChainModal}
                                         type="button"
-                                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-3"
+                                        className="w-full py-6 inline-flex items-center justify-center whitespace-nowrap rounded-xl md:rounded-4xl text-black text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-3"
                                     >
                                         {chain.hasIcon && (
                                             <div
@@ -92,7 +92,7 @@ export function WalletButton() {
                                     <button
                                         onClick={openAccountModal}
                                         type="button"
-                                        className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-3"
+                                        className="w-full py-6 inline-flex items-center justify-center whitespace-nowrap rounded-xl md:rounded-4xl text-black text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-3"
                                     >
                                         {account.displayName}
                                     </button>

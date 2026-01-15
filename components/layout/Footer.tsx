@@ -119,7 +119,7 @@ export function Footer() {
                     {/* Copyright & Disclaimer */}
                     <div className="text-center space-y-2">
                         <p className="text-sm text-white/60">
-                            © 2026 AuRoom Protocol. Built on Base Sepolia Testnet.
+                            © 2026 AuRoom Protocol. Built on Mantle Sepolia Testnet.
                         </p>
                         <p className="text-sm text-yellow-500 font-medium">
                             ⚠️ DISCLAIMER

@@ -2,7 +2,7 @@
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { usePoolReserves } from '@/hooks/admin/usePoolReserves';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { TOKENS } from '@/lib/contracts/tokens';
 import { formatUnits } from 'viem';
 import { Droplets, TrendingUp } from 'lucide-react';

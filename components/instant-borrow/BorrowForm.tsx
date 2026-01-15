@@ -10,7 +10,7 @@ import { formatUnits, parseUnits } from 'viem';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { useXAUTAllowanceV2, useXAUTApproveV2 } from '@/hooks/contracts/useTokenApprovalsV2';
 import { useDepositAndBorrow, usePreviewDepositAndBorrow, useXAUTPriceV2 } from '@/hooks/contracts/useBorrowingProtocolV2';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { Loader2, Zap, CheckCircle2 } from 'lucide-react';
 
 interface BorrowFormProps {

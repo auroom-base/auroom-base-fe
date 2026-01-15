@@ -109,7 +109,7 @@ export function SuccessModal({
                     {/* Transaction Hash Link */}
                     {data.txHash && (
                         <a
-                            href={`https://sepolia.basescan.org/tx/${data.txHash}`}
+                            href={`https://sepolia.mantlescan.xyz/tx/${data.txHash}`}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="flex items-center justify-center gap-2 text-sm text-yellow-400 hover:text-yellow-300 transition-colors"

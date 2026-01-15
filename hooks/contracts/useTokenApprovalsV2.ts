@@ -1,7 +1,7 @@
 // hooks/contracts/useTokenApprovalsV2.ts
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt, useAccount } from 'wagmi';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { ERC20ABI } from '@/lib/contracts/abis';
 
 // ========== XAUT APPROVAL FOR V2 ==========

@@ -1,4 +1,4 @@
-# 🏆 AuRoom Protocol - Frontend
+# AuRoom Protocol - Frontend
 
 <div align="center">
 
@@ -12,23 +12,23 @@
 [![Tailwind](https://img.shields.io/badge/Tailwind-4.x-38B2AC?style=flat-square&logo=tailwind-css)](https://tailwindcss.com/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=flat-square)](./LICENSE)
 
-[🌐 Live Demo](https://auroom-base-testnet.vercel.app) • [📜 Smart Contracts](https://github.com/AuroomProtocol/auroom-base-sc) • [🔧 Backend](https://github.com/AuroomProtocol/auroom-base-be) • [📖 Documentation](#-documentation)
+[Live Demo](https://auroom-mantle-testnet.vercel.app) • [Smart Contracts](https://github.com/AuroomProtocol/auroom-mantle-sc) • [Backend](https://github.com/AuroomProtocol/auroom-mantle-be) • [Documentation](#-documentation)
 
 </div>
 
 ---
 
-## 🌐 Live Demo
+## Live Demo
 
-**🔗 [https://auroom-base-testnet.vercel.app](https://auroom-base-testnet.vercel.app)**
+**[https://auroom-mantle-testnet.vercel.app](https://auroom-mantle-testnet.vercel.app)**
 
-> ⚠️ **Testnet Only**: This demo runs on Base Sepolia testnet. Do not use real funds.
+> **Testnet Only**: This demo runs on Mantle Sepolia testnet. Do not use real funds.
 
 ---
 
-## 📖 Overview
+## Overview
 
-**AuRoom** is a Real World Asset (RWA) protocol on Base that enables users to access Indonesian Rupiah (IDRX) liquidity using tokenized gold (XAUT) as collateral, and seamlessly redeem IDRX back to fiat currency through bank transfers.
+**AuRoom** is a Real World Asset (RWA) protocol on Mantle that enables users to access Indonesian Rupiah (IDRX) liquidity using tokenized gold (XAUT) as collateral, and seamlessly redeem IDRX back to fiat currency through bank transfers.
 
 ### Why AuRoom?
 
@@ -36,10 +36,10 @@
 ┌────────────────────────────────────────────────────────────────┐
 │                                                                 │
 │   REGULAR DEX:                                                  │
-│   XAUT ──→ IDRX ──→ 🚀 Sell for cash (off-chain, complex)          │
+│   XAUT ──→ IDRX ──→ Sell for cash (off-chain, complex)          │
 │                                                                 │
 │   AUROOM:                                                        │
-│   XAUT ──→ Cash Loan ──→ IDRX ──→ 🏦 Direct bank transfer      │
+│   XAUT ──→ Cash Loan ──→ IDRX ──→ Direct bank transfer      │
 │                                                                 │
 │   "Unlock liquidity from your gold. Instant. On-chain."         │
 │                                                                 │
@@ -48,39 +48,39 @@
 
 ---
 
-## ✨ Features
+## Features
 
-### 🏠 Landing Page
+### Landing Page
 - Protocol overview and value proposition
 - Live protocol statistics (collateral, loans, prices)
 - Educational content about RWA and tokenized gold
 - Comparison: AuRoom vs Traditional DEX
 
-### 💰 Cash Loan Page
+### Cash Loan Page
 - Borrow IDRX using XAUT collateral
 - Flexible LTV options (30%, 40%, 50%)
 - Instant liquidity without selling your gold
 - Integrated bank details for redeem
 
-### 📊 My Loans Page
+### My Loans Page
 - Track active loans and collateral
 - View loan health and liquidation risk
 - Repay loans to unlock collateral
 - Transaction history
 
-### 💎 IDRX Redeem Flow
+### IDRX Redeem Flow
 - Burn IDRX tokens on-chain
 - Direct bank transfer to Indonesian bank accounts
 - Support for major banks (BCA, BNI, BRI, Mandiri)
 - Real-time status tracking with reference number
 
-### 💱 Swap Page
+### Swap Page
 - Swap IDRX ↔ XAUT ↔ USDC seamlessly
 - Real-time quotes from on-chain data
 - Slippage protection
 - Transaction status tracking
 
-### 🛠️ Admin Page
+### Admin Page
 - **Faucet**: Get test tokens (IDRX, USDC, XAUT)
 - **Liquidity**: Add/remove liquidity to pools
 - **Identity**: Manage user verification
@@ -88,7 +88,7 @@
 
 ---
 
-## ️ Tech Stack
+## Tech Stack
 
 ### Core
 | Technology | Version | Purpose |
@@ -118,10 +118,10 @@
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 ```
-auroom-base-fe/
+auroom-mantle-fe/
 ├── app/                      # Next.js App Router
 │   ├── page.tsx              # Landing page
 │   ├── layout.tsx            # Root layout
@@ -143,7 +143,7 @@ auroom-base-fe/
 │   └── admin/                # Admin-specific hooks
 ├── lib/
 │   ├── contracts/            # Contract addresses & ABIs
-│   │   ├── base_addresses.ts # Base Sepolia addresses
+│   │   ├── mantle_addresses.ts # Mantle Sepolia addresses
 │   │   ├── chains.ts         # Chain configuration
 │   │   └── abis/             # Contract ABIs
 │   ├── wagmi.ts              # Wagmi configuration
@@ -154,7 +154,7 @@ auroom-base-fe/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -165,8 +165,8 @@ auroom-base-fe/
 
 ```bash
 # Clone the repository
-git clone https://github.com/AuroomProtocol/auroom-base-fe.git
-cd auroom-base-fe
+git clone https://github.com/AuroomProtocol/auroom-mantle-fe.git
+cd auroom-mantle-fe
 
 # Install dependencies
 pnpm install
@@ -185,58 +185,59 @@ Create a `.env` file:
 # WalletConnect Project ID (get from https://cloud.walletconnect.com)
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
 
-# Contract Addresses (Base Sepolia)
-MOCK_IDRX=0x998ceb700e57f535873D189a6b1B7E2aA8C594EB
-MOCK_USDC=0xCd88C2886A1958BA36238A070e71B51CF930b44d
-XAUT=0x56EeDF50c3C4B47Ca9762298B22Cb86468f834FC
-IDENTITY_REGISTRY=0xA8F2b8180caFC670f4a24114FDB9c50361038857
-UNISWAP_FACTORY=0xDb198BEaccC55934062Be9AAEdce332c40A1f1Ed
-UNISWAP_ROUTER=0x620870d419F6aFca8AFed5B516619aa50900cadc
-PAIR_IDRX_USDC=0xd1fED56a7B4C93DF968494Bb9a6023546Da45D3B
-PAIR_XAUT_USDC=0x61E24e8A69553D55bae612f2dF4d959654181652
-SWAP_ROUTER=0x41c7215F0538200013F428732900bC581015c50e
-BORROWING_PROTOCOL_V2=0x3A1229F6D51940DBa65710F9F6ab0296FD56718B
+# Contract Addresses (Mantle Sepolia)
+MOCK_IDRX=0xf0C848387950609a3F97e3d67363C46562aD0e28
+MOCK_USDC=0xc76AfD7BAd35e66A6146564DDc391C97300c642b
+XAUT=0xab8c0a0a773356A0843567b89E6e4330FDa7B9D6
+IDENTITY_REGISTRY=0x28532929e2A67Dba781391bA0f7663b0cADA655F
+UNISWAP_FACTORY=0x55c3D72C2F35A157ee154Bb37B7dDC9be0132BBf
+UNISWAP_ROUTER=0x7064Acd14aD0a4b75997C0CcBAD2C89DadA6df69
+PAIR_IDRX_USDC=0x3d134aDD1BfCc62e68CfA98D6A8b5Bb0d511f815
+PAIR_XAUT_USDC=0xD4a1Bd11386C0F2619A849044294296253a6369B
+SWAP_ROUTER=0x8980c7477E091E06f34a418c9fc923D1df849734
+BORROWING_PROTOCOL_V2=0xb38139e077621421eba724008bB33C10996E6435
+
+# Network Configuration
+NEXT_PUBLIC_EXPLORER_URL=https://sepolia.mantlescan.xyz
 
 # IDRX API Configuration
-IDRX_API_BASE_URL=https://api.idrx.org
-IDRX_API_KEY=your_api_key_here
 IDRX_MODE=demo  # Use 'demo' for testing, 'production' for real API
 ```
 
 ---
 
-## 📜 Contract Addresses
+## Contract Addresses
 
-All contracts are deployed on **Base Sepolia Testnet** (Chain ID: 84532)
+All contracts are deployed on **Mantle Sepolia Testnet** (Chain ID: 5003)
 
 | Contract | Address |
 |----------|---------|
 | **Tokens** | |
-| IDRX | `0x998ceb700e57f535873D189a6b1B7E2aA8C594EB` |
-| USDC | `0xCd88C2886A1958BA36238A070e71B51CF930b44d` |
-| XAUT (Gold) | `0x56EeDF50c3C4B47Ca9762298B22Cb86468f834FC` |
+| IDRX | `0xf0C848387950609a3F97e3d67363C46562aD0e28` |
+| USDC | `0xc76AfD7BAd35e66A6146564DDc391C97300c642b` |
+| XAUT (Gold) | `0xab8c0a0a773356A0843567b89E6e4330FDa7B9D6` |
 | **Infrastructure** | |
-| IdentityRegistry | `0xA8F2b8180caFC670f4a24114FDB9c50361038857` |
-| UniswapV2Factory | `0xDb198BEaccC55934062Be9AAEdce332c40A1f1Ed` |
-| UniswapV2Router | `0x620870d419F6aFca8AFed5B516619aa50900cadc` |
+| IdentityRegistry | `0x28532929e2A67Dba781391bA0f7663b0cADA655F` |
+| UniswapV2Factory | `0x55c3D72C2F35A157ee154Bb37B7dDC9be0132BBf` |
+| UniswapV2Router | `0x7064Acd14aD0a4b75997C0CcBAD2C89DadA6df69` |
 | **Liquidity Pairs** | |
-| IDRX/USDC Pair | `0xd1fED56a7B4C93DF968494Bb9a6023546Da45D3B` |
-| XAUT/USDC Pair | `0x61E24e8A69553D55bae612f2dF4d959654181652` |
+| IDRX/USDC Pair | `0x3d134aDD1BfCc62e68CfA98D6A8b5Bb0d511f815` |
+| XAUT/USDC Pair | `0xD4a1Bd11386C0F2619A849044294296253a6369B` |
 | **Core Protocol** | |
-| SwapRouter | `0x41c7215F0538200013F428732900bC581015c50e` |
-| BorrowingProtocolV2 | `0x3A1229F6D51940DBa65710F9F6ab0296FD56718B` |
+| SwapRouter | `0x8980c7477E091E06f34a418c9fc923D1df849734` |
+| BorrowingProtocolV2 | `0xb38139e077621421eba724008bB33C10996E6435` |
 
-> 💡 **Block Explorer**: [Base Sepolia Basescan](https://sepolia.basescan.org)
+> **Block Explorer**: [Mantle Sepolia Explorer](https://sepolia.mantlescan.xyz)
 
 ---
 
-## 🎮 How to Use
+## How to Use
 
 ### 1. Connect Wallet
 
 1. Click "Connect Wallet" button
 2. Select your preferred wallet (MetaMask, Coinbase, etc.)
-3. Switch to Base Sepolia network if prompted
+3. Switch to Mantle Sepolia network if prompted
 
 ### 2. Get Test Tokens
 
@@ -288,7 +289,7 @@ All contracts are deployed on **Base Sepolia Testnet** (Chain ID: 84532)
 
 ---
 
-## 🧪 Development
+## Development
 
 ### Scripts
 
@@ -308,7 +309,7 @@ pnpm lint
 
 ---
 
-## 🚢 Deployment
+## Deployment
 
 ### Vercel (Recommended)
 
@@ -319,19 +320,19 @@ pnpm lint
 
 ---
 
-## 🔐 Security Notes
+## Security Notes
 
-- ⚠️ **Testnet Only**: This is a demo on Base Sepolia
-- ⚠️ **No Real Funds**: All tokens are mock/test tokens
-- ⚠️ **KYC Required**: Users must be verified to use XAUT
-- ⚠️ **Demo Mode**: IDRX redeem uses mock API by default
-- ✅ **Non-Custodial**: You always control your keys
-- ✅ **On-Chain Verification**: All burns are recorded on blockchain
-- ✅ **Slippage Protection**: Built into all swaps
+-  **Testnet Only**: This is a demo on Mantle Sepolia
+-  **No Real Funds**: All tokens are mock/test tokens
+-  **KYC Required**: Users must be verified to use XAUT
+-  **Demo Mode**: IDRX redeem uses mock API by default
+-  **Non-Custodial**: You always control your keys
+-  **On-Chain Verification**: All burns are recorded on blockchain
+-  **Slippage Protection**: Built into all swaps
 
 ---
 
-## 🗺️ Roadmap
+## Roadmap
 
 - [x] Landing page with protocol info
 - [x] Swap functionality (IDRX ↔ XAUT ↔ USDC)
@@ -341,15 +342,15 @@ pnpm lint
 - [x] Admin helper tools
 - [x] Demo mode for testing
 - [x] Live protocol statistics
-- [x] Base Sepolia deployment
-- [ ] Real IDRX API integration (production mode)
-- [ ] Transaction history improvements
-- [ ] Mobile app (React Native)
-- [ ] Mainnet deployment on Base
+- [x] Mantle Sepolia deployment
+- [] Real IDRX API integration (production mode)
+- [] Transaction history improvements
+- [] Mobile app (React Native)
+- [] Mainnet deployment on Mantle
 
 ---
 
-## 🤝 Contributing
+## Contributing
 
 Contributions are welcome!
 
@@ -361,15 +362,15 @@ Contributions are welcome!
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- **Base** - L2 Blockchain Infrastructure by Coinbase
+- **Mantle** - L2 Blockchain Infrastructure
 - **IDRX.org** - Indonesian Rupiah stablecoin provider
 - **RainbowKit** - Beautiful wallet connection
 - **wagmi** - Excellent React hooks for Ethereum
@@ -378,10 +379,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-<div align="center">
-
-**Built with ❤️ on Base Sepolia**
-
-[⬆ Back to Top](#-auroom-protocol---frontend)
+<div align="center"> **Built on Mantle Sepolia**[Back to Top](#-auroom-protocol---frontend)
 
 </div>

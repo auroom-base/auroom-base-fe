@@ -53,12 +53,12 @@ export function AdminDashboard() {
                         </div>
                         <div>
                             <p className="text-sm text-muted-foreground">Network</p>
-                            <p className="text-sm font-medium">Base Sepolia (84532)</p>
+                            <p className="text-sm font-medium">Mantle Sepolia (5003)</p>
                         </div>
                         <div>
                             <p className="text-sm text-muted-foreground">Native Balance</p>
                             <p className="text-sm font-medium">
-                                {nativeBalance ? parseFloat(nativeBalance.formatted).toFixed(4) : '0.0000'} ETH
+                                {nativeBalance ? parseFloat(nativeBalance.formatted).toFixed(4) : '0.0000'} MNT
                             </p>
                         </div>
                     </div>
@@ -125,11 +125,11 @@ export function AdminDashboard() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                         <div>
                             <p className="text-muted-foreground">Network</p>
-                            <p className="font-medium">Base Sepolia Testnet</p>
+                            <p className="font-medium">Mantle Sepolia Testnet</p>
                         </div>
                         <div>
                             <p className="text-muted-foreground">Chain ID</p>
-                            <p className="font-medium font-mono">84532</p>
+                            <p className="font-medium font-mono">5003</p>
                         </div>
                     </div>
                 </CardContent>

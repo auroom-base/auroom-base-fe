@@ -10,7 +10,7 @@ import { SuccessModal } from './SuccessModal';
 import { useAccount } from 'wagmi';
 import { formatUnits, parseUnits } from 'viem';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
-import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
+import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
 import { simulateRedeem, SUPPORTED_BANKS } from '@/lib/redeem/simulation';
 import { Building2, AlertTriangle } from 'lucide-react';
 
