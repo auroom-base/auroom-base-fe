@@ -11,11 +11,13 @@ import { ClientProviders } from "@/components/ClientProviders";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap", // Optimize font loading
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap", // Optimize font loading
 });
 
 const APP_URL = process.env.NEXT_PUBLIC_URL || 'https://auroom-base-testnet.vercel.app';
@@ -59,6 +61,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preconnect to external domains for faster loading */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://images.unsplash.com" />
+        <link rel="dns-prefetch" href="https://api.web3modal.org" />
+        <link rel="dns-prefetch" href="https://pulse.walletconnect.org" />
+        <link rel="dns-prefetch" href="https://sepolia.base.org" />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-black overscroll-none`}
       >
@@ -75,3 +86,4 @@ export default function RootLayout({
     </html>
   );
 }
+
