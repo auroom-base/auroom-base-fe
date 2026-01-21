@@ -34,7 +34,7 @@ export function VerificationBanner() {
                             <span>Request verification coming soon</span>
                         </div>
                         <a
-                            href="mailto:admin@auroom.dev?subject=Verification Request&body=Wallet Address: "
+                            href="mailto:cinder.54-garret@icloud.com?subject=Verification Request&body=Wallet Address: "
                             className="inline-flex items-center gap-1.5 text-xs text-yellow-400 hover:text-yellow-300 transition-colors"
                         >
                             <span>Contact Admin</span>
