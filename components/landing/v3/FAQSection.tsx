@@ -1,12 +1,8 @@
-'use client';
+// FAQSection - Hybrid SSR/CSR Component
+// Static content renders on server, accordion interaction on client
 
-import { useRef, useState } from 'react';
-import { useGSAP } from '@gsap/react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Plus, Minus } from 'lucide-react';
-
-gsap.registerPlugin(ScrollTrigger);
+import { FAQAccordion } from '@/components/animation/FAQAccordion';
+import { AnimatedFadeIn } from '@/components/animation/AnimatedFadeIn';
 
 const faqItems = [
     {
@@ -36,43 +32,8 @@ const faqItems = [
 ];
 
 export function FAQSection() {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const titleRef = useRef<HTMLDivElement>(null);
-    const itemsRef = useRef<HTMLDivElement>(null);
-    const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-    useGSAP(
-        () => {
-            const tl = gsap.timeline({
-                scrollTrigger: {
-                    trigger: containerRef.current,
-                    start: 'top 80%',
-                },
-            });
-
-            tl.from(titleRef.current, {
-                y: 50,
-                opacity: 0,
-                duration: 1,
-                ease: 'power3.out',
-            }).from(
-                (itemsRef.current as HTMLDivElement).children,
-                {
-                    y: 30,
-                    opacity: 0,
-                    duration: 0.8,
-                    stagger: 0.1,
-                    ease: 'power2.out',
-                },
-                '-=0.5'
-            );
-        },
-        { scope: containerRef }
-    );
-
     return (
         <section
-            ref={containerRef}
             className="py-24 md:py-32 bg-[#0A0A0A] relative overflow-hidden"
             id="faq"
         >
@@ -81,9 +42,9 @@ export function FAQSection() {
 
             <div className="max-w-6xl mx-auto px-4 md:px-6">
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
-                    {/* Left Column: Title & Image */}
+                    {/* Left Column: Title & Image - SSR */}
                     <div className="lg:col-span-4 lg:sticky lg:top-32 h-fit">
-                        <div ref={titleRef}>
+                        <AnimatedFadeIn direction="up" duration={1}>
                             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
                                 Got <span className="text-[#F5D061]">Questions?</span>
                                 <br />
@@ -100,40 +61,12 @@ export function FAQSection() {
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                             </div>
-                        </div>
+                        </AnimatedFadeIn>
                     </div>
 
-                    {/* Right Column: Accordion */}
-                    <div className="lg:col-span-8" ref={itemsRef}>
-                        {faqItems.map((item, index) => (
-                            <div
-                                key={index}
-                                className={`group border-b border-white/10 last:border-0 transition-colors duration-300 ${openIndex === index ? 'bg-white/5' : 'hover:bg-white/[0.02]'
-                                    }`}
-                            >
-                                <button
-                                    onClick={() => setOpenIndex(index === openIndex ? null : index)}
-                                    className="w-full py-8 px-6 flex items-start justify-between text-left gap-4"
-                                >
-                                    <span className={`text-xl font-medium transition-colors duration-300 ${openIndex === index ? 'text-[#F5D061]' : 'text-white'
-                                        }`}>
-                                        {item.question}
-                                    </span>
-                                    <span className={`shrink-0 mt-1 transition-transform duration-300 ${openIndex === index ? 'rotate-180 text-[#F5D061]' : 'text-gray-500'
-                                        }`}>
-                                        {openIndex === index ? <Minus size={20} /> : <Plus size={20} />}
-                                    </span>
-                                </button>
-                                <div
-                                    className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === index ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0'
-                                        }`}
-                                >
-                                    <p className="px-6 pb-8 text-gray-400 leading-relaxed text-lg">
-                                        {item.answer}
-                                    </p>
-                                </div>
-                            </div>
-                        ))}
+                    {/* Right Column: Accordion - CSR for interaction */}
+                    <div className="lg:col-span-8">
+                        <FAQAccordion items={faqItems} />
                     </div>
                 </div>
             </div>
