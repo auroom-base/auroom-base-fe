@@ -276,8 +276,8 @@ export default function MyLoansPage() {
                                         {/* Left: Icon & Type */}
                                         <div className="flex items-center gap-4">
                                             <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${loan.type === 'borrow'
-                                                    ? 'bg-gradient-to-br from-yellow-500/20 to-orange-500/20 text-yellow-400'
-                                                    : 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 text-green-400'
+                                                ? 'bg-gradient-to-br from-yellow-500/20 to-orange-500/20 text-yellow-400'
+                                                : 'bg-gradient-to-br from-green-500/20 to-emerald-500/20 text-green-400'
                                                 }`}>
                                                 {loan.type === 'borrow' ? <TrendingDown className="w-6 h-6" /> : <TrendingUp className="w-6 h-6" />}
                                             </div>
@@ -288,10 +288,10 @@ export default function MyLoansPage() {
                                                         {loan.type === 'borrow' ? 'Loan Disbursed' : 'Repayment Completed'}
                                                     </h3>
                                                     <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider ${loan.status === 'completed'
-                                                            ? 'bg-green-500/10 text-green-400 border border-green-500/20'
-                                                            : loan.status === 'pending'
-                                                                ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
-                                                                : 'bg-red-500/10 text-red-400 border border-red-500/20'
+                                                        ? 'bg-green-500/10 text-green-400 border border-green-500/20'
+                                                        : loan.status === 'pending'
+                                                            ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20'
+                                                            : 'bg-red-500/10 text-red-400 border border-red-500/20'
                                                         }`}>
                                                         {loan.status}
                                                     </span>
@@ -321,7 +321,7 @@ export default function MyLoansPage() {
                                             </div>
 
                                             <a
-                                                href={`https://sepolia.mantlescan.xyz/tx/${loan.txHash}`}
+                                                href={`https://sepolia.basescan.org/tx/${loan.txHash}`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-white/40 hover:text-white hover:bg-white/10 transition-all border border-transparent hover:border-white/10"

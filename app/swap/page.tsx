@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { ArrowDownUp, RefreshCw } from 'lucide-react';
 import { TOKENS } from '@/lib/contracts/tokens';
-import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
+import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
 import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { useTokenAllowance } from '@/hooks/contracts/useTokenAllowance';
 import { useTokenApproval } from '@/hooks/contracts/useTokenApproval';

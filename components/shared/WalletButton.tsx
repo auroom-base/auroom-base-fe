@@ -86,7 +86,7 @@ export function WalletButton() {
                                                 )}
                                             </div>
                                         )}
-                                        {balance ? `${Number(formatUnits(balance.value, balance.decimals)).toFixed(4)} ${balance.symbol}` : '0.0000 MNT'}
+                                        {balance ? `${Number(formatUnits(balance.value, balance.decimals)).toFixed(4)} ${balance.symbol}` : '0.0000 ETH'}
                                     </button>
 
                                     <button

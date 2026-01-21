@@ -4,14 +4,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { ExternalLink, Droplet } from 'lucide-react';
 
-const MANTLE_FAUCET_URL = "https://faucet.sepolia.mantle.xyz";
+const BASE_FAUCET_URL = "https://faucet.sepolia.base.org";
 
 /**
- * ExternalFaucet - Link to Mantle Sepolia MNT faucet
+ * ExternalFaucet - Link to Base Sepolia ETH faucet
  */
 export function ExternalFaucet() {
     const openFaucet = () => {
-        window.open(MANTLE_FAUCET_URL, '_blank', 'noopener,noreferrer');
+        window.open(BASE_FAUCET_URL, '_blank', 'noopener,noreferrer');
     };
 
     return (
@@ -19,15 +19,15 @@ export function ExternalFaucet() {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <Droplet className="h-5 w-5 text-primary" />
-                    Native Token (MNT)
+                    Native Token (ETH)
                 </CardTitle>
                 <CardDescription>
-                    Get MNT for gas fees
+                    Get ETH for gas fees
                 </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
                 <p className="text-sm text-muted-foreground">
-                    Need MNT for gas fees? Get testnet MNT from the official Mantle Sepolia faucet.
+                    Need ETH for gas fees? Get testnet ETH from the official Base Sepolia faucet.
                 </p>
 
                 <Button
@@ -36,11 +36,11 @@ export function ExternalFaucet() {
                     className="w-full"
                 >
                     <ExternalLink className="mr-2 h-4 w-4" />
-                    Open Mantle Sepolia Faucet
+                    Open Base Sepolia Faucet
                 </Button>
 
                 <p className="text-xs text-muted-foreground text-center">
-                    {MANTLE_FAUCET_URL}
+                    {BASE_FAUCET_URL}
                 </p>
             </CardContent>
         </Card>

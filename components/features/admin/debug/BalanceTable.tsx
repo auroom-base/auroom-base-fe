@@ -64,9 +64,9 @@ export function BalanceTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {/* Native MNT */}
+                            {/* Native ETH */}
                             <tr className="border-b last:border-0 hover:bg-muted/50 transition-colors">
-                                <td className="p-3 text-sm font-medium">MNT</td>
+                                <td className="p-3 text-sm font-medium">ETH</td>
                                 <td className="p-3 text-sm text-right font-mono">
                                     {nativeBalance?.value ? formatBalance(formatUnits(nativeBalance.value, nativeBalance.decimals), 18) : '0.00'}
                                 </td>

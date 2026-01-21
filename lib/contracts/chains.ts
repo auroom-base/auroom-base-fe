@@ -1,26 +1,26 @@
 import { defineChain } from 'viem';
 
-export const mantleSepolia = defineChain({
-    id: 5003,
-    name: 'Mantle Sepolia',
-    network: 'mantle-sepolia',
+export const baseSepolia = defineChain({
+    id: 84532,
+    name: 'Base Sepolia',
+    network: 'base-sepolia',
     nativeCurrency: {
-        name: 'MNT',
-        symbol: 'MNT',
+        name: 'ETH',
+        symbol: 'ETH',
         decimals: 18,
     },
     rpcUrls: {
         default: {
-            http: ['https://rpc.sepolia.mantle.xyz'],
+            http: ['https://sepolia.base.org'],
         },
         public: {
-            http: ['https://rpc.sepolia.mantle.xyz'],
+            http: ['https://sepolia.base.org'],
         },
     },
     blockExplorers: {
         default: {
-            name: 'Mantle Sepolia Explorer',
-            url: 'https://sepolia.mantlescan.xyz',
+            name: 'Base Sepolia Explorer',
+            url: 'https://sepolia.basescan.org',
         },
     },
     testnet: true,

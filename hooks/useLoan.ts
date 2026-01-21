@@ -23,7 +23,7 @@ import {
     useIDRXAllowanceV2,
     useIDRXApproveV2,
 } from './contracts/useTokenApprovalsV2';
-import { MANTLE_CONTRACTS as CONTRACTS } from '@/lib/contracts/mantle_addresses';
+import { BASE_CONTRACTS as CONTRACTS } from '@/lib/contracts/base_addresses';
 import { calculateLoan, calculateMaxLoan } from '@/lib/utils/loanCalculations';
 
 /**
