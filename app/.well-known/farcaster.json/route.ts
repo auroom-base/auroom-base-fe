@@ -12,7 +12,7 @@ export async function GET() {
             name: "AuRoom",
             homeUrl: URL,
             iconUrl: `${URL}/logo.png`,
-            splashImageUrl: `${URL}/logo.png`,
+            splashImageUrl: `${URL}/splash-icon.png`,
             splashBackgroundColor: "#000000",
             webhookUrl: `${URL}/api/webhook`,
             subtitle: "Gold-Backed Rupiah Loans",

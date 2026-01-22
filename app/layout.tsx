@@ -46,7 +46,7 @@ export const metadata: Metadata = {
           type: 'launch_miniapp',
           name: 'AuRoom',
           url: APP_URL,
-          splashImageUrl: `${APP_URL}/logo.svg`,
+          splashImageUrl: `${APP_URL}/splash-icon.png`,
           splashBackgroundColor: '#000000',
         },
       },
