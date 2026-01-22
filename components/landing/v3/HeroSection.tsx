@@ -77,7 +77,7 @@ export function HeroSection() {
             <div className="hero-bg absolute inset-0 z-0">
                 {/* Fallback/Poster Image from Unsplash - Abstract Gold */}
                 <Image
-                    src="https://images.unsplash.com/photo-1707572288220-b1f68bc5fa10?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGdvbGQlMjBiYXIlMjBhYnN0cmFjdHxlbnwwfHwwfHx8Mg%3D%3D"
+                    src="https://images.unsplash.com/photo-1707572288220-b1f68bc5fa10?w=1200&q=60&auto=format&fit=crop"
                     alt="Gold Abstract Background"
                     fill
                     className="object-cover opacity-60"

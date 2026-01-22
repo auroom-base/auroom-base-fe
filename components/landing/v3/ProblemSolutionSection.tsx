@@ -11,21 +11,21 @@ gsap.registerPlugin(ScrollTrigger);
 
 const problems = [
     {
-        image: 'https://images.unsplash.com/photo-1591439657848-9f4b9ce436b9?q=80&w=2574&auto=format&fit=crop', // Queue/Waiting
+        image: 'https://images.unsplash.com/photo-1591439657848-9f4b9ce436b9?w=800&q=60&auto=format&fit=crop', // Queue/Waiting
         title: 'Stuck in the Past?',
         subtitle: 'Traditional Pawnshops',
         points: ['Endless queues', 'Mountains of paperwork', 'Strict operating hours'],
         icon: <Clock className="w-5 h-5 text-[#F5A623]" />
     },
     {
-        image: 'https://images.unsplash.com/photo-1580519542036-c47de6196ba5?q=80&w=2671&auto=format&fit=crop', // Money loss concept
+        image: 'https://images.unsplash.com/photo-1580519542036-c47de6196ba5?w=800&q=60&auto=format&fit=crop', // Money loss concept
         title: 'Selling is Losing',
         subtitle: 'Traditional Gold Selling',
         points: ['Lose your asset forever', 'Huge spread loss', 'Regret comes later'],
         icon: <Ban className="w-5 h-5 text-[#F5A623]" />
     },
     {
-        image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=2670&auto=format&fit=crop', // Paperwork
+        image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=800&q=60&auto=format&fit=crop', // Paperwork
         title: 'Buried in Paperwork?',
         subtitle: 'Bank Loans',
         points: ['Days to approve', 'Complex requirements', 'Rigid terms'],

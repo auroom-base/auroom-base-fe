@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "analyze": "ANALYZE=true next build",
+    "analyze:server": "ANALYZE=server next build",
+    "analyze:browser": "ANALYZE=browser next build",
+    "lighthouse": "npx lighthouse https://auroom-base-testnet.vercel.app --output html --output json --output-path ./lighthouse-report --view",
+    "lighthouse:mobile": "npx lighthouse https://auroom-base-testnet.vercel.app --preset=mobile --view",
+    "lighthouse:perf": "npx lighthouse https://auroom-base-testnet.vercel.app --only-categories=performance --view"
   },
   "dependencies": {
     "@base-org/account": "^2.5.1",
@@ -54,6 +60,7 @@
     "wagmi": "^2.19.5"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^16.1.4",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",

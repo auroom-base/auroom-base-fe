@@ -55,7 +55,7 @@ export function FAQSection() {
                             </p>
                             <div className="rounded-2xl overflow-hidden border border-white/10 relative aspect-[4/5] hidden lg:block">
                                 <img
-                                    src="https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?q=80&w=2657&auto=format&fit=crop"
+                                    src="https://images.unsplash.com/photo-1620325867502-221cfb5faa5f?w=800&q=60&auto=format&fit=crop"
                                     alt="Gold Texture"
                                     className="object-cover w-full h-full opacity-80 hover:scale-105 transition-transform duration-700"
                                 />

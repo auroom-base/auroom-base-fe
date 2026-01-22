@@ -15,7 +15,7 @@ const steps = [
         number: "01",
         title: "Secure Your Asset",
         description: "Deposit your XAUT tokens into our audited smart contract vault. Your ownership is immutable and cryptographically secured.",
-        image: "https://images.unsplash.com/photo-1582139329536-e7284fece509?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c2VjdXJlJTIwYXNzZXR8ZW58MHx8MHx8fDA%3D", // Safe/Lock/Crypto
+        image: "https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&q=60&auto=format&fit=crop", // Safe/Lock/Crypto
         icon: <ShieldCheck className="w-6 h-6 text-[#F5A623]" />,
         badges: ["Non-Custodial", "Audited"]
     },
@@ -23,7 +23,7 @@ const steps = [
         number: "02",
         title: "Customize Terms",
         description: "Select your desired loan amount and duration. Our protocol instantly calculates the optimal Health Factor and collateral metrics.",
-        image: "https://images.unsplash.com/photo-1763872849312-67984fbf5f68?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", // Trading/Chart/Interface
+        image: "https://images.unsplash.com/photo-1763872849312-67984fbf5f68?w=800&q=60&auto=format&fit=crop", // Trading/Chart/Interface
         icon: <Calculator className="w-6 h-6 text-[#F5A623]" />,
         badges: ["Dynamic LTV", "Real-time"]
     },
@@ -31,7 +31,7 @@ const steps = [
         number: "03",
         title: "Instant Liquidity",
         description: "Receive stablecoins directly to your wallet in seconds. No credit checks, no banks, no waiting period.",
-        image: "https://images.unsplash.com/photo-1766504172649-7c1ed823f780?w=900&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8cGF5bWVudCUyMHRyYW5zZmVyfGVufDB8fDB8fHwy", // Payment/Digital Transfer
+        image: "https://images.unsplash.com/photo-1766504172649-7c1ed823f780?w=800&q=60&auto=format&fit=crop", // Payment/Digital Transfer
         icon: <Zap className="w-6 h-6 text-[#F5A623]" />,
         badges: ["< 30s Settlement", "Automated"]
     },
