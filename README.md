@@ -87,6 +87,50 @@
 - **Debug**: View balances, allowances, contract info
 
 ---
+## Architecure Diagram
+
+```mermaid
+graph TD
+    subgraph Client ["Client Side (Browser)"]
+        UI["User Interface <br/>(Next.js / React 19)"]
+        Store["Local Storage <br/>(KYC Progress)"]
+        Wallet["Web3 Wallet <br/>(RainbowKit / Wagmi)"]
+        
+        UI -->|Reads/Writes| Store
+        UI -->|Connects| Wallet
+    end
+
+    subgraph Server ["Server Side (Next.js API Routes)"]
+        Proxy["Secure Proxy API <br/>(/api/redeem)"]
+        Secrets[("Environment Variables <br/> API Keys & Secrets")]
+        
+        Proxy -.->|Reads| Secrets
+    end
+
+    subgraph Blockchain ["Blockchain Layer (Base Sepolia)"]
+        SC_Borrow["Borrowing Protocol V2"]
+        SC_Swap["Swap Router"]
+        Tokens["Tokens <br/>(IDRX, XAUT, USDC)"]
+        
+        Wallet -->|Transactions| SC_Borrow
+        Wallet -->|Transactions| SC_Swap
+        SC_Borrow -->|Interacts| Tokens
+    end
+
+    subgraph External ["External Services"]
+        IDRX_API["IDRX Banking API <br/>(Off-ramp / Redeem)"]
+        RPC["RPC Provider"]
+    end
+
+    %% Flows
+    UI -->|"HTTPS Request (Public Data)"| Proxy
+    Proxy -->|"Signed Request (HMAC)"| IDRX_API
+    
+    Wallet -->|"RPC Calls"| RPC
+    RPC -->|Read/Write| Blockchain
+```
+
+---
 
 ## ️ Tech Stack
 
