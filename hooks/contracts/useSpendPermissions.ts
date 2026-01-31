@@ -46,17 +46,25 @@ export function useSpendPermissions() {
             const activeChainId = chainId || 84532; // Default to Base Sepolia logic if undefined
 
             // 1. Construct Spend Permission
-            const permission: SpendPermission = {
+            const permission = {
                 account: address,
                 spender: spender,
                 token: token,
-                allowance: maxUint160, // Grant max allowance for this session/period
+                allowance: BigInt(amount), // Grant exact amount needed (safer for UI display)
                 period: 0, // 0 = no recurring period
                 start: 0, // Valid immediately
-                end: 281474976710655, // Max uint48 (far future)
+                end: 281474976710655, // Max uint48
                 salt: BigInt(0),
-                extraData: '0x'
-            };
+                extraData: '0x' as `0x${string}`
+            } as const;
+
+            console.log("Signing Permission:", permission);
+            console.log("Domain Check:", {
+                name: 'Spend Permission Manager',
+                version: '1',
+                chainId: activeChainId,
+                verifyingContract: SPEND_PERMISSION_MANAGER_ADDRESS
+            });
 
             // 2. Sign Typed Data (EIP-712)
             const signature = await signTypedDataAsync({
