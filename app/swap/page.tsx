@@ -124,7 +124,7 @@ export default function SwapPage() {
 
     // Handle approve
     const handleApprove = () => {
-        approval.approve(CONTRACTS.SwapRouter);
+        approval.approve(CONTRACTS.SwapRouter, parsedAmount);
     };
 
     // Handle swap
