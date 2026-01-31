@@ -31,6 +31,9 @@ export default function SwapPage() {
     const [inputAmount, setInputAmount] = useState('');
     const [slippageBps, setSlippageBps] = useState(DEFAULT_SLIPPAGE_BPS);
 
+    const MIN_IDRX_AMOUNT = 1000000;
+    const isAmountTooLow = fromToken === 'IDRX' && inputAmount !== '' && isValidAmount(inputAmount) && parseFloat(inputAmount) < MIN_IDRX_AMOUNT;
+
     const containerRef = useRef<HTMLDivElement>(null);
     const titleRef = useRef<HTMLDivElement>(null);
     const cardRef = useRef<HTMLDivElement>(null);
@@ -142,6 +145,7 @@ export default function SwapPage() {
         if (!isConnected) return 'Connect Wallet';
         if (!isVerified) return 'Verification Required';
         if (!inputAmount || !isValidAmount(inputAmount)) return 'Enter Amount';
+        if (isAmountTooLow) return 'Amount Too Low';
         if (fromBalance && parsedAmount > fromBalance) return 'Insufficient Balance';
         if (needsApproval) {
             if (approval.isPending || approval.isConfirming)
@@ -157,6 +161,7 @@ export default function SwapPage() {
         if (!isConnected) return false;
         if (!isVerified) return true;
         if (!inputAmount || !isValidAmount(inputAmount)) return true;
+        if (isAmountTooLow) return true;
         if (fromBalance && parsedAmount > fromBalance) return true;
         if (approval.isPending || approval.isConfirming) return true;
         if (swapRouter.isPending || swapRouter.isConfirming) return true;
@@ -214,12 +219,17 @@ export default function SwapPage() {
                                         <div className="flex gap-4 items-center">
                                             <div className="flex-1">
                                                 <Input
-                                                    type="text"
+                                                    type="number"
                                                     placeholder="0.00"
                                                     value={inputAmount}
                                                     onChange={(e) => setInputAmount(e.target.value)}
-                                                    className="w-full bg-transparent border-none text-2xl md:text-3xl font-bold p-0 h-auto focus-visible:ring-0 placeholder:text-white/20 text-white"
+                                                    className="w-full bg-transparent border-none text-2xl md:text-3xl font-bold p-0 h-auto focus-visible:ring-0 placeholder:text-white/20 text-white no-spinner"
                                                 />
+                                                {isAmountTooLow && (
+                                                    <p className="text-red-500 text-xs mt-1 animate-pulse font-medium">
+                                                        Minimum amount is {MIN_IDRX_AMOUNT.toLocaleString('id-ID')} IDRX
+                                                    </p>
+                                                )}
                                             </div>
                                             <div className="flex items-center gap-3 bg-zinc-800/80 px-4 py-2 rounded-lg border border-white/5 shadow-inner">
                                                 {/* Token Icon */}
