@@ -103,9 +103,7 @@ export function HeroSection() {
                     </div>
 
                     <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight tracking-tight">
-                        Turn Your <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] to-amber-200">Gold</span> into
-                        <br />
-                        Limitless Possibilities
+                        Fiat when you need it. <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#F5A623] to-amber-200">Gold</span> when you want it.
                     </h1>
 
                     <p className="text-lg md:text-xl text-gray-300 mb-10 leading-relaxed max-w-xl">
