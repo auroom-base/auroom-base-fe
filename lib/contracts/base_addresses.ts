@@ -18,6 +18,7 @@ export const BASE_CONTRACTS = {
     // ===== CORE PROTOCOL =====
     SwapRouter: "0x41c7215F0538200013F428732900bC581015c50e" as const,
     BorrowingProtocolV2: "0x3A1229F6D51940DBa65710F9F6ab0296FD56718B" as const,
+    SpendPermissionManager: "0xf85210B21cC50302F477BA56686d2019dC9b67Ad" as const,
 
     // Alias for backward compatibility
     BorrowingProtocol: "0x3A1229F6D51940DBa65710F9F6ab0296FD56718B" as const,

@@ -4,7 +4,6 @@ import { useState, useRef } from 'react';
 import { useAccount, useChainId } from 'wagmi';
 // @ts-ignore
 import { useCapabilities } from 'wagmi/experimental';
-import { useSmartSwap } from '@/hooks/contracts/useSmartSwap';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +14,9 @@ import { useTokenBalance } from '@/hooks/contracts/useTokenBalance';
 import { useTokenAllowance } from '@/hooks/contracts/useTokenAllowance';
 import { useTokenApproval } from '@/hooks/contracts/useTokenApproval';
 import { useSwapRouter } from '@/hooks/contracts/useSwapRouter';
+import { useSpendPermissions } from '@/hooks/contracts/useSpendPermissions';
+import { encodeFunctionData } from 'viem';
+import { SwapRouterABI } from '@/lib/contracts/abis';
 import { useIdentityRegistry } from '@/hooks/contracts/useIdentityRegistry';
 import { parseTokenAmount, formatTokenAmount, getExplorerTxUrl } from '@/lib/utils/format';
 import { calculateMinimumReceived } from '@/lib/utils/calculations';
@@ -38,7 +40,7 @@ export default function SwapPage() {
     const { data: capabilities } = useCapabilities({ account: address });
     const atomicBatchSupported = capabilities?.[chainId]?.atomicBatch?.supported;
 
-    const { smartSwap, isPending: isSmartSwapPending, isSuccess: isSmartSwapSuccess, id: smartSwapId, error: smartSwapError } = useSmartSwap();
+    // Hook replaced above
 
     const MIN_IDRX_AMOUNT = 1000000;
     const isAmountTooLow = fromToken === 'IDRX' && inputAmount !== '' && isValidAmount(inputAmount) && parseFloat(inputAmount) < MIN_IDRX_AMOUNT;
@@ -149,22 +151,43 @@ export default function SwapPage() {
         }
     };
 
-    // Check capabilities for Smart Wallet features
-    // [Removed duplicate block]
+    // Spend Permissions Hook
+    const { approveAndSpend, isSigning, isPending: isSmartSwapPending, isSuccess: isSmartSwapSuccess, data: smartSwapId, error: smartSwapError } = useSpendPermissions();
 
     // ...
 
-    const handleButtonClick = () => {
+    const handleButtonClick = async () => {
         if (!isConnected) return;
 
         if (atomicBatchSupported) {
-            // Smart Wallet: Batch Approve + Swap
-            smartSwap({
-                tokenIn: fromToken === 'IDRX' ? TOKENS.IDRX.address : TOKENS.XAUT.address,
-                amountIn: parsedAmount,
-                amountOutMin: calculateMinimumReceived(outputAmount, slippageBps),
-                isIdrxToXaut: fromToken === 'IDRX'
+            const tokenIn = fromToken === 'IDRX' ? TOKENS.IDRX.address : TOKENS.XAUT.address;
+            const amountIn = parsedAmount;
+            const amountOutMin = calculateMinimumReceived(outputAmount, slippageBps);
+
+            // Construct the Swap Call Data (target function)
+            const swapFunctionName = fromToken === 'IDRX' ? 'swapIDRXtoXAUT' : 'swapXAUTtoIDRX';
+
+            // Calculate deadline
+            const deadline = BigInt(Math.floor(Date.now() / 1000) + 1200); // 20 mins
+
+            const swapCallData = encodeFunctionData({
+                abi: SwapRouterABI,
+                functionName: swapFunctionName,
+                args: [amountIn, amountOutMin, address, deadline]
             });
+
+            // Smart Wallet: Sign Permission + Batch Spend & Swap
+            try {
+                await approveAndSpend({
+                    token: tokenIn,
+                    spender: CONTRACTS.SwapRouter,
+                    amount: amountIn,
+                    targetContract: CONTRACTS.SwapRouter,
+                    targetFunctionData: swapCallData
+                });
+            } catch (e) {
+                console.error("Smart Swap Failed", e);
+            }
             return;
         }
 
@@ -185,6 +208,7 @@ export default function SwapPage() {
 
         // Smart Wallet Flow
         if (atomicBatchSupported) {
+            if (isSigning) return <span className="flex items-center gap-2"><RefreshCw className="w-4 h-4 animate-spin" /> Signing Permission...</span>;
             if (isSmartSwapPending) return <span className="flex items-center gap-2"><RefreshCw className="w-4 h-4 animate-spin" /> Swapping...</span>;
             return 'Swap Now';
         }
@@ -208,7 +232,7 @@ export default function SwapPage() {
         if (fromBalance && parsedAmount > fromBalance) return true;
 
         if (atomicBatchSupported) {
-            return isSmartSwapPending;
+            return isSigning || isSmartSwapPending;
         }
 
         if (approval.isPending || approval.isConfirming) return true;
