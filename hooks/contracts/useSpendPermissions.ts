@@ -46,20 +46,21 @@ export function useSpendPermissions() {
             const activeChainId = chainId || 84532; // Default to Base Sepolia logic if undefined
 
             // 1. Construct Spend Permission
+            const now = Math.floor(Date.now() / 1000);
             const permission = {
                 account: address,
                 spender: spender,
                 token: token,
-                allowance: BigInt(amount), // Grant exact amount needed (safer for UI display)
-                period: 0, // 0 = no recurring period
-                start: 0, // Valid immediately
-                end: 281474976710655, // Max uint48
+                allowance: BigInt(amount),
+                period: 0,
+                start: now,
+                end: now + 31536000, // 1 year validity (Avoids MaxUint48 UI bugs)
                 salt: BigInt(0),
                 extraData: '0x' as `0x${string}`
             } as const;
 
             console.log("Signing Permission:", permission);
-            console.log("Domain Check:", {
+            console.log("Domain:", {
                 name: 'Spend Permission Manager',
                 version: '1',
                 chainId: activeChainId,
