@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useChainId } from 'wagmi';
+// @ts-ignore
+import { useCapabilities } from 'wagmi/experimental';
+import { useSmartSwap } from '@/hooks/contracts/useSmartSwap';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -30,6 +33,12 @@ export default function SwapPage() {
     const [toToken, setToToken] = useState<'IDRX' | 'XAUT'>('XAUT');
     const [inputAmount, setInputAmount] = useState('');
     const [slippageBps, setSlippageBps] = useState(DEFAULT_SLIPPAGE_BPS);
+    const chainId = useChainId();
+    // @ts-ignore
+    const { data: capabilities } = useCapabilities({ account: address });
+    const atomicBatchSupported = capabilities?.[chainId]?.atomicBatch?.supported;
+
+    const { smartSwap, isPending: isSmartSwapPending, isSuccess: isSmartSwapSuccess, id: smartSwapId, error: smartSwapError } = useSmartSwap();
 
     const MIN_IDRX_AMOUNT = 1000000;
     const isAmountTooLow = fromToken === 'IDRX' && inputAmount !== '' && isValidAmount(inputAmount) && parseFloat(inputAmount) < MIN_IDRX_AMOUNT;
@@ -140,13 +149,47 @@ export default function SwapPage() {
         }
     };
 
-    // Determine button state
+    // Check capabilities for Smart Wallet features
+    // [Removed duplicate block]
+
+    // ...
+
+    const handleButtonClick = () => {
+        if (!isConnected) return;
+
+        if (atomicBatchSupported) {
+            // Smart Wallet: Batch Approve + Swap
+            smartSwap({
+                tokenIn: fromToken === 'IDRX' ? TOKENS.IDRX.address : TOKENS.XAUT.address,
+                amountIn: parsedAmount,
+                amountOutMin: calculateMinimumReceived(outputAmount, slippageBps),
+                isIdrxToXaut: fromToken === 'IDRX'
+            });
+            return;
+        }
+
+        // Standard Wallet
+        if (needsApproval) {
+            handleApprove();
+        } else {
+            handleSwap();
+        }
+    };
+
     const getButtonContent = () => {
         if (!isConnected) return 'Connect Wallet';
         if (!isVerified) return 'Verification Required';
         if (!inputAmount || !isValidAmount(inputAmount)) return 'Enter Amount';
         if (isAmountTooLow) return 'Amount Too Low';
         if (fromBalance && parsedAmount > fromBalance) return 'Insufficient Balance';
+
+        // Smart Wallet Flow
+        if (atomicBatchSupported) {
+            if (isSmartSwapPending) return <span className="flex items-center gap-2"><RefreshCw className="w-4 h-4 animate-spin" /> Swapping...</span>;
+            return 'Swap Now';
+        }
+
+        // Standard Flow
         if (needsApproval) {
             if (approval.isPending || approval.isConfirming)
                 return <span className="flex items-center gap-2"><RefreshCw className="w-4 h-4 animate-spin" /> Approving...</span>;
@@ -163,21 +206,14 @@ export default function SwapPage() {
         if (!inputAmount || !isValidAmount(inputAmount)) return true;
         if (isAmountTooLow) return true;
         if (fromBalance && parsedAmount > fromBalance) return true;
+
+        if (atomicBatchSupported) {
+            return isSmartSwapPending;
+        }
+
         if (approval.isPending || approval.isConfirming) return true;
         if (swapRouter.isPending || swapRouter.isConfirming) return true;
         return false;
-    };
-
-    const handleButtonClick = () => {
-        if (!isConnected) {
-            // User should use wallet button in header
-            return;
-        }
-        if (needsApproval) {
-            handleApprove();
-        } else {
-            handleSwap();
-        }
     };
 
     return (
@@ -400,14 +436,27 @@ export default function SwapPage() {
                                         )}
 
                                         {/* Errors */}
-                                        {(approval.error || swapRouter.error) && (
+                                        {(approval.error || swapRouter.error || smartSwapError) && (
                                             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-sm text-red-400">
                                                 <p className="font-bold flex items-center gap-2">
                                                     <span className="text-lg">!</span> Transaction Failed
                                                 </p>
                                                 <p className="opacity-80 mt-1">
-                                                    {(approval.error?.message || swapRouter.error?.message)?.slice(0, 100)}...
+                                                    {(approval.error?.message || swapRouter.error?.message || smartSwapError?.message)?.slice(0, 100)}...
                                                 </p>
+                                            </div>
+                                        )}
+
+                                        {/* Smart Swap Success */}
+                                        {isSmartSwapSuccess && smartSwapId && (
+                                            <div className="p-3 bg-green-500/10 border border-green-500/20 rounded-xl text-sm flex items-center gap-3">
+                                                <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_10px_rgba(34,197,94,0.5)]"></div>
+                                                <div className="flex-1">
+                                                    <p className="font-medium text-green-400">Batched Swap Successful!</p>
+                                                    <div className="text-white/40 text-xs mt-0.5">
+                                                        Tx ID: {String(smartSwapId).slice(0, 10)}...
+                                                    </div>
+                                                </div>
                                             </div>
                                         )}
                                     </div>
