@@ -7,6 +7,7 @@ import { Footer } from "@/components/layout/Footer";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { OnboardingModal } from "@/components/shared/OnboardingModal";
 import { ClientProviders } from "@/components/ClientProviders";
+import { ErudaDebug } from "@/components/debug/ErudaDebug";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -79,6 +80,7 @@ export default function RootLayout({
             <main className="flex-1 pb-20 md:pb-0">{children}</main>
             <Footer />
             {/* <BottomNavigation /> */}
+            <ErudaDebug />
             <OnboardingModal />
           </div>
         </ClientProviders>

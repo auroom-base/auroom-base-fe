@@ -20,129 +20,129 @@ type SpendPermission = {
     extraData: `0x${string}`;
 };
 
-export function useSpendPermissions() {
-    const { address } = useAccount();
-    const { signTypedDataAsync } = useSignTypedData();
-    const { sendCalls, isPending, isSuccess, data: id, error } = useSendCalls();
-    const [isSigning, setIsSigning] = useState(false);
+const { address, chainId } = useAccount();
+const { signTypedDataAsync } = useSignTypedData();
+const { sendCalls, isPending, isSuccess, data: id, error } = useSendCalls();
+const [isSigning, setIsSigning] = useState(false);
 
-    const approveAndSpend = useCallback(async ({
-        token,
-        spender,
-        amount,
-        targetContract,
-        targetFunctionData
-    }: {
-        token: Address;
-        spender: Address; // Who can spend (e.g. SwapRouter)
-        amount: bigint;
-        targetContract: Address; // Contract to call after approval (usually same as spender)
-        targetFunctionData: `0x${string}`; // Encoded function call (e.g. swap...)
-    }) => {
-        if (!address) return;
+const approveAndSpend = useCallback(async ({
+    token,
+    spender,
+    amount,
+    targetContract,
+    targetFunctionData
+}: {
+    token: Address;
+    spender: Address; // Who can spend (e.g. SwapRouter)
+    amount: bigint;
+    targetContract: Address; // Contract to call after approval (usually same as spender)
+    targetFunctionData: `0x${string}`; // Encoded function call (e.g. swap...)
+}) => {
+    if (!address) return;
 
-        try {
-            setIsSigning(true);
+    try {
+        setIsSigning(true);
+        const activeChainId = chainId || 84532; // Default to Base Sepolia logic if undefined
 
-            // 1. Construct Spend Permission
-            const permission: SpendPermission = {
-                account: address,
-                spender: spender,
-                token: token,
-                allowance: maxUint160, // Grant max allowance for this session/period
-                period: 0, // 0 = no recurring period
-                start: 0, // Valid immediately
-                end: 281474976710655, // Max uint48 (far future)
-                salt: BigInt(0),
-                extraData: '0x'
-            };
+        // 1. Construct Spend Permission
+        const permission: SpendPermission = {
+            account: address,
+            spender: spender,
+            token: token,
+            allowance: maxUint160, // Grant max allowance for this session/period
+            period: 0, // 0 = no recurring period
+            start: 0, // Valid immediately
+            end: 281474976710655, // Max uint48 (far future)
+            salt: BigInt(0),
+            extraData: '0x'
+        };
 
-            // 2. Sign Typed Data (EIP-712)
-            const signature = await signTypedDataAsync({
-                domain: {
-                    name: 'Spend Permission Manager',
-                    version: '1',
-                    chainId: 84532, // Base Sepolia
-                    verifyingContract: SPEND_PERMISSION_MANAGER_ADDRESS,
-                },
-                types: {
-                    SpendPermission: [
-                        { name: 'account', type: 'address' },
-                        { name: 'spender', type: 'address' },
-                        { name: 'token', type: 'address' },
-                        { name: 'allowance', type: 'uint160' },
-                        { name: 'period', type: 'uint48' },
-                        { name: 'start', type: 'uint48' },
-                        { name: 'end', type: 'uint48' },
-                        { name: 'salt', type: 'uint256' },
-                        { name: 'extraData', type: 'bytes' },
-                    ],
-                },
-                primaryType: 'SpendPermission',
-                message: permission,
-            });
+        // 2. Sign Typed Data (EIP-712)
+        const signature = await signTypedDataAsync({
+            domain: {
+                name: 'Spend Permission Manager',
+                version: '1',
+                chainId: activeChainId,
+                verifyingContract: SPEND_PERMISSION_MANAGER_ADDRESS,
+            },
+            types: {
+                SpendPermission: [
+                    { name: 'account', type: 'address' },
+                    { name: 'spender', type: 'address' },
+                    { name: 'token', type: 'address' },
+                    { name: 'allowance', type: 'uint160' },
+                    { name: 'period', type: 'uint48' },
+                    { name: 'start', type: 'uint48' },
+                    { name: 'end', type: 'uint48' },
+                    { name: 'salt', type: 'uint256' },
+                    { name: 'extraData', type: 'bytes' },
+                ],
+            },
+            primaryType: 'SpendPermission',
+            message: permission,
+        });
 
-            setIsSigning(false);
+        setIsSigning(false);
 
-            // 3. Batch Calls: ApproveWithSignature + Execute Action
-            // Note: We use approveWithSignature to register the permission on-chain.
-            // THEN we call the target function.
-            // CAUTION: Standard SwapRouter uses `transferFrom`. 
-            // It assumes standard ERC20 allowance.
-            // SpendPermissionManager works differently: Spender calls Manager.spend().
-            // IF SwapRouter is not modified to use Manager.spend(), this might fail 
-            // unless we wrap it or use Manager.spend() to push tokens to Router first.
+        // 3. Batch Calls: ApproveWithSignature + Execute Action
+        // Note: We use approveWithSignature to register the permission on-chain.
+        // THEN we call the target function.
+        // CAUTION: Standard SwapRouter uses `transferFrom`. 
+        // It assumes standard ERC20 allowance.
+        // SpendPermissionManager works differently: Spender calls Manager.spend().
+        // IF SwapRouter is not modified to use Manager.spend(), this might fail 
+        // unless we wrap it or use Manager.spend() to push tokens to Router first.
 
-            // STRATEGY: 
-            // 1. Register Permission (approveWithSig)
-            // 2. Move tokens to SwapRouter via Manager.spend() (Push)
-            // 3. Call SwapRouter.swap... (Swap)
+        // STRATEGY: 
+        // 1. Register Permission (approveWithSig)
+        // 2. Move tokens to SwapRouter via Manager.spend() (Push)
+        // 3. Call SwapRouter.swap... (Swap)
 
-            // Check if amount fits in uint160
-            const amount160 = amount > maxUint160 ? maxUint160 : amount;
+        // Check if amount fits in uint160
+        const amount160 = amount > maxUint160 ? maxUint160 : amount;
 
-            const calls = [
-                // 1. Register Permission
-                {
-                    to: SPEND_PERMISSION_MANAGER_ADDRESS,
-                    data: encodeFunctionData({
-                        abi: SpendPermissionManagerABI,
-                        functionName: 'approveWithSignature',
-                        args: [permission, signature]
-                    })
-                },
-                // 2. Spend (Push to Router)
-                // This moves tokens from User -> Spender (Router) using the permission
-                {
-                    to: SPEND_PERMISSION_MANAGER_ADDRESS,
-                    data: encodeFunctionData({
-                        abi: SpendPermissionManagerABI,
-                        functionName: 'spend',
-                        args: [permission, amount160]
-                    })
-                },
-                // 3. Execute Swap
-                {
-                    to: targetContract,
-                    data: targetFunctionData
-                }
-            ];
+        const calls = [
+            // 1. Register Permission
+            {
+                to: SPEND_PERMISSION_MANAGER_ADDRESS,
+                data: encodeFunctionData({
+                    abi: SpendPermissionManagerABI,
+                    functionName: 'approveWithSignature',
+                    args: [permission, signature]
+                })
+            },
+            // 2. Spend (Push to Router)
+            // This moves tokens from User -> Spender (Router) using the permission
+            {
+                to: SPEND_PERMISSION_MANAGER_ADDRESS,
+                data: encodeFunctionData({
+                    abi: SpendPermissionManagerABI,
+                    functionName: 'spend',
+                    args: [permission, amount160]
+                })
+            },
+            // 3. Execute Swap
+            {
+                to: targetContract,
+                data: targetFunctionData
+            }
+        ];
 
-            sendCalls({ calls });
+        sendCalls({ calls });
 
-        } catch (err) {
-            console.error("SpendPermission error:", err);
-            setIsSigning(false);
-            throw err;
-        }
-    }, [address, signTypedDataAsync, sendCalls]);
+    } catch (err) {
+        console.error("SpendPermission error:", err);
+        setIsSigning(false);
+        throw err;
+    }
+}, [address, signTypedDataAsync, sendCalls]);
 
-    return {
-        approveAndSpend,
-        isSigning,
-        isPending, // TX pending
-        isSuccess,
-        data: id,
-        error
-    };
+return {
+    approveAndSpend,
+    isSigning,
+    isPending, // TX pending
+    isSuccess,
+    data: id,
+    error
+};
 }
