@@ -6,7 +6,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { formatRupiah, formatXAUT, formatInputValue } from '@/lib/utils/format';
 import { Loader2, CheckCircle2 } from 'lucide-react';
+import { useAccount } from 'wagmi';
 import { useIDRXApproval } from '@/hooks/useLoan';
+import { PreflightCard } from '@/components/cash-loan/PreflightCard';
+import { useSimulateRepay } from '@/hooks/useSimulateRepay';
 
 interface RepayModalProps {
     isOpen: boolean;
@@ -37,9 +40,14 @@ export function RepayModal({
     const remainingDebt = isFullRepay ? 0n : debt - repayAmount;
     const collateralReturned = isFullRepay ? collateral : 0n;
     const hasSufficientBalance = idrxBalance >= repayAmount;
+    const { address } = useAccount();
 
     // Check if approval is needed
     const needsApproval = repayAmount > 0n && idrxApproval.allowance < repayAmount;
+
+    // Pre-flight simulation — only when IDRX is approved
+    const withdrawAmount = isFullRepay ? collateral : 0n;
+    const simulation = useSimulateRepay(address, repayAmount, withdrawAmount, needsApproval);
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const rawValue = e.target.value.replace(/[^\d]/g, '');
@@ -193,6 +201,11 @@ export function RepayModal({
                             </span>
                         </div>
                     </div>
+
+                    {/* Pre-flight Simulation */}
+                    {repayAmount > 0n && !needsApproval && (
+                        <PreflightCard result={simulation} />
+                    )}
 
                     {/* Action Button */}
                     {needsApproval ? (

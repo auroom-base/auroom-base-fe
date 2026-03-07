@@ -18,6 +18,8 @@ export const BASE_CONTRACTS = {
     // ===== CORE PROTOCOL =====
     SwapRouter: "0x41c7215F0538200013F428732900bC581015c50e" as const,
     BorrowingProtocolV2: "0x3A1229F6D51940DBa65710F9F6ab0296FD56718B" as const,
+    BorrowingProtocolCRE: "0x4a5a4284c7f4170b00e90bba42df8dcc3b0cc036" as const,  // v3 with tiered KYC (redeployed 2026-03-06, new VTN)
+    IdentityRegistryV2: "0x655b16c3c1145ddf7455aa349e8ee6dd498622be" as const,
     SpendPermissionManager: "0xf85210B21cC50302F477BA56686d2019dC9b67Ad" as const,
 
     // Alias for backward compatibility

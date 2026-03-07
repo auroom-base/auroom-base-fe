@@ -32,16 +32,16 @@ export function calculateLoan(
     ltvBps: number = LOAN_CONFIG.FIXED_LTV_BPS,
     feeBps: number = LOAN_CONFIG.FEE_BPS
 ): LoanCalculation {
-    // Guard: zero input
-    if (loanAmount === 0n) {
+    // Guard: zero input or loading price
+    if (loanAmount === 0n || xautPrice === 0n) {
         return {
-            loanAmount: 0n,
+            loanAmount: loanAmount,
             collateralRequired: 0n,
             collateralValue: 0n,
             fee: 0n,
             amountReceived: 0n,
             isValid: false,
-            errorMessage: 'Enter loan amount',
+            errorMessage: xautPrice === 0n ? 'Loading price...' : 'Enter loan amount',
         };
     }
 

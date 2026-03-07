@@ -59,6 +59,12 @@
     "viem": "2.x",
     "wagmi": "^2.19.5"
   },
+  "overrides": {
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "@types/react": "^19",
+    "@tanstack/react-query": "^5.90.12"
+  },
   "devDependencies": {
     "@next/bundle-analyzer": "^16.1.4",
     "@tailwindcss/postcss": "^4",
@@ -66,7 +72,6 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.182.0",
-    "eruda": "^3.4.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.0",
     "tailwindcss": "^4",

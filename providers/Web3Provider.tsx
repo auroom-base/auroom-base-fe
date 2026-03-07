@@ -8,16 +8,17 @@ import { baseSepolia } from '@/lib/contracts/chains';
 import { ReactNode, useEffect, useRef } from 'react';
 import { useConnect, useAccount } from 'wagmi';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { AutoFundOnConnect } from '@/components/providers/AutoFundOnConnect';
 
 const queryClient = new QueryClient();
 
-// Config with Coinbase Wallet as primary connector for Base App compatibility
+// Base Sepolia — real chain where CRE workflow writes gold prices
 const config = createConfig({
     chains: [baseSepolia],
     connectors: [
         coinbaseWallet({
             appName: 'AuRoom Protocol',
-            preference: 'smartWalletOnly', // For Base App compatibility
+            preference: 'smartWalletOnly',
         }),
         injected(),
         walletConnect({
@@ -25,10 +26,11 @@ const config = createConfig({
         }),
     ],
     transports: {
-        [baseSepolia.id]: http(),
+        [baseSepolia.id]: http(), // uses wagmi's built-in Base Sepolia public RPC
     },
     ssr: true,
 });
+
 
 // Auto-connect component for Base App
 function AutoConnectHandler({ children }: { children: ReactNode }) {
@@ -79,6 +81,7 @@ export function Web3Provider({ children }: { children: ReactNode }) {
         <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
                 <RainbowKitProvider>
+                    <AutoFundOnConnect />
                     <AutoConnectHandler>
                         {children}
                     </AutoConnectHandler>

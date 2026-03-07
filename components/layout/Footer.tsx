@@ -8,8 +8,8 @@ export function Footer() {
     const footerLinks = {
         product: [
             { name: 'Cash Loans', href: '/cash-loan' },
-            { name: 'Buy Gold', href: '/swap' },
-            { name: 'Vault', href: '/vault' },
+            { name: 'Faucet', href: '/faucet' },
+            { name: 'KYC', href: '/kyc' },
         ],
         resources: [
             { name: 'FAQ', href: '#faq' },
@@ -119,7 +119,7 @@ export function Footer() {
                     {/* Copyright & Disclaimer */}
                     <div className="text-center space-y-2">
                         <p className="text-sm text-white/60">
-                            © 2026 AuRoom Protocol. Built on Base Sepolia Testnet.
+                            © 2026 AuRoom Protocol. Built on AuRoom Testnet (Tenderly).
                         </p>
                         <p className="text-sm text-yellow-500 font-medium">
                             ⚠️ DISCLAIMER

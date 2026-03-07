@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAccount } from 'wagmi';
-import { Home, ArrowLeftRight, Banknote, FileText } from 'lucide-react';
+import { Home, ArrowLeftRight, Banknote, FileText, Droplets, ShieldCheck } from 'lucide-react';
 
 const navItems = [
     { href: '/', label: 'Home', icon: Home },
-    { href: '/swap', label: 'Swap', icon: ArrowLeftRight, requiresAuth: true },
     { href: '/cash-loan', label: 'Loan', icon: Banknote, requiresAuth: true },
+    { href: '/faucet', label: 'Faucet', icon: Droplets, requiresAuth: true },
+    { href: '/kyc', label: 'KYC', icon: ShieldCheck, requiresAuth: true },
     { href: '/my-loans', label: 'My Loans', icon: FileText, requiresAuth: true },
 ];
 
@@ -31,8 +32,8 @@ export function BottomNavigation() {
                             key={item.href}
                             href={item.href}
                             className={`flex flex-col items-center justify-center min-w-[64px] min-h-[44px] px-3 py-2 rounded-lg transition-colors ${isActive
-                                    ? 'text-yellow-400 bg-yellow-400/10'
-                                    : 'text-white/60 hover:text-white hover:bg-white/5'
+                                ? 'text-yellow-400 bg-yellow-400/10'
+                                : 'text-white/60 hover:text-white hover:bg-white/5'
                                 }`}
                         >
                             <Icon className="w-5 h-5 mb-1" />

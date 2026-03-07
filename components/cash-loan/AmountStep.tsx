@@ -1,14 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import { useAccount } from 'wagmi';
 import { Button } from '@/components/ui/button';
 import { GoldBalanceCard } from './GoldBalanceCard';
 import { LoanAmountInput } from './LoanAmountInput';
 import { LTVSelector } from './LTVSelector';
 import { LoanSummary } from './LoanSummary';
+import { PreflightCard } from './PreflightCard';
+import { useSimulateDeposit } from '@/hooks/useSimulateDeposit';
 import { Loader2, ChevronDown, ChevronUp, Settings } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { formatRupiah } from '@/lib/utils/format';
+
+// usdToIdr FX rate (keep in sync with config.staging.json)
+const USD_TO_IDR = 16_774.66;
 
 interface AmountStepProps {
     // Gold data
@@ -72,10 +78,20 @@ export function AmountStep({
     disabled,
 }: AmountStepProps) {
     const [showAdvanced, setShowAdvanced] = useState(false);
+    const { address } = useAccount();
 
     const loanAmount = loanInput ? BigInt(loanInput) * BigInt(1e6) : 0n;
     const isFormValid = loanAmount > 0n && calculation.isValid;
     const isProcessing = approvalPending || approvalConfirming || continuePending || continueConfirming;
+
+    // Pre-flight simulation — only runs once XAUT is approved.
+    // Skipped when needsApproval=true because depositAndBorrow would always
+    // revert with ERC20InsufficientAllowance before approval, which is misleading.
+    const simulation = useSimulateDeposit(
+        needsApproval ? undefined : address,
+        calculation.collateralRequired,
+        loanAmount,
+    );
 
     return (
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
@@ -87,6 +103,31 @@ export function AmountStep({
                 xautPrice={goldPrice}
                 isLoading={goldLoading}
             />
+
+            {/* Live Gold Rate */}
+            {goldPrice > 0n && (
+                <div className="flex items-center justify-between px-4 py-3 rounded-xl bg-zinc-900/80 border border-yellow-500/20">
+                    <div className="flex items-center gap-2">
+                        {/* pulsing live dot */}
+                        <span className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-green-500" />
+                        </span>
+                        <span className="text-white/60 text-xs">Live Rate</span>
+                        <span className="px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                            ⬡ Chainlink CRE
+                        </span>
+                    </div>
+                    <div className="text-right">
+                        <p className="text-yellow-400 font-semibold text-sm">
+                            1 XAUT = {formatRupiah(goldPrice / 100n)}
+                        </p>
+                        <p className="text-white/40 text-xs">
+                            ≈ ${(Number(goldPrice) / 1e8 / USD_TO_IDR).toLocaleString('en-US', { maximumFractionDigits: 2 })} USD
+                        </p>
+                    </div>
+                </div>
+            )}
 
             {/* Loan Amount Input */}
             <LoanAmountInput
@@ -158,6 +199,11 @@ export function AmountStep({
                         ⚠️ {calculation.errorMessage}
                     </p>
                 </div>
+            )}
+
+            {/* Pre-flight Simulation — only show after XAUT is approved */}
+            {isFormValid && !needsApproval && (
+                <PreflightCard result={simulation} />
             )}
 
             {/* Action Button */}

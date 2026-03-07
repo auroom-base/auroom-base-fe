@@ -13,7 +13,7 @@ export function useXAUTAllowanceV2() {
         address: CONTRACTS.XAUT,
         abi: ERC20ABI,
         functionName: 'allowance',
-        args: address ? [address, CONTRACTS.BorrowingProtocolV2] : undefined,
+        args: address ? [address, CONTRACTS.BorrowingProtocolCRE] : undefined,
         query: {
             enabled: !!address,
             refetchInterval: 5000,
@@ -30,7 +30,7 @@ export function useXAUTApproveV2() {
             address: CONTRACTS.XAUT,
             abi: ERC20ABI,
             functionName: 'approve',
-            args: [CONTRACTS.BorrowingProtocolV2, amount],
+            args: [CONTRACTS.BorrowingProtocolCRE, amount],
         });
     };
 
@@ -53,7 +53,7 @@ export function useIDRXAllowanceV2() {
         address: CONTRACTS.IDRX,
         abi: ERC20ABI,
         functionName: 'allowance',
-        args: address ? [address, CONTRACTS.BorrowingProtocolV2] : undefined,
+        args: address ? [address, CONTRACTS.BorrowingProtocolCRE] : undefined,
         query: {
             enabled: !!address,
             refetchInterval: 5000,
@@ -70,7 +70,7 @@ export function useIDRXApproveV2() {
             address: CONTRACTS.IDRX,
             abi: ERC20ABI,
             functionName: 'approve',
-            args: [CONTRACTS.BorrowingProtocolV2, amount],
+            args: [CONTRACTS.BorrowingProtocolCRE, amount],
         });
     };
 

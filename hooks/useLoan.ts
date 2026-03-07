@@ -10,13 +10,13 @@
 import { useAccount } from 'wagmi';
 import { useTokenBalance } from './contracts/useTokenBalance';
 import {
-    useXAUTPriceV2,
-    useBorrowFeeV2,
-    useUserPositionV2,
-    useDepositAndBorrow,
-    useRepayAndWithdraw,
-    useClosePosition,
-} from './contracts/useBorrowingProtocolV2';
+    useXAUTPriceCRE,
+    useBorrowFeeCRE,
+    useUserPositionCRE,
+    useDepositAndBorrowCRE,
+    useRepayAndWithdrawCRE,
+    useClosePositionCRE,
+} from './contracts/useBorrowingProtocolCRE';
 import {
     useXAUTAllowanceV2,
     useXAUTApproveV2,
@@ -44,7 +44,7 @@ export function useGoldBalance() {
  * Get gold (XAUT) price in IDRX
  */
 export function useGoldPrice() {
-    const { data: price, isLoading } = useXAUTPriceV2();
+    const { data: price, isLoading } = useXAUTPriceCRE();
 
     return {
         price: (price as bigint) || 0n,
@@ -56,7 +56,7 @@ export function useGoldPrice() {
  * Get active loan position
  */
 export function useActiveLoan() {
-    const position = useUserPositionV2();
+    const position = useUserPositionCRE();
 
     const hasActiveLoan = position.debt > 0n;
 
@@ -65,6 +65,7 @@ export function useActiveLoan() {
         debt: position.debt,
         collateralValue: position.collateralValue,
         ltv: position.ltv,
+        isLiquidatable: position.isLiquidatable,
         hasActiveLoan,
         isLoading: position.isLoading,
         refetch: position.refetch,
@@ -91,7 +92,7 @@ export function useIDRXBalance() {
 export function useLoanCalculation(loanAmount: bigint, ltvBps: number = 3000) {
     const { balance: xautBalance } = useGoldBalance();
     const { price: xautPrice } = useGoldPrice();
-    const { data: feeBps } = useBorrowFeeV2();
+    const { data: feeBps } = useBorrowFeeCRE();
 
     const calculation = calculateLoan(
         loanAmount,
@@ -151,7 +152,7 @@ export function useIDRXApproval() {
  * Deposit and borrow hook
  */
 export function useBorrow() {
-    const borrow = useDepositAndBorrow();
+    const borrow = useDepositAndBorrowCRE();
 
     return {
         execute: borrow.execute,
@@ -168,7 +169,7 @@ export function useBorrow() {
  * Repay hook (supports partial and full repayment)
  */
 export function useRepay() {
-    const repay = useRepayAndWithdraw();
+    const repay = useRepayAndWithdrawCRE();
 
     return {
         execute: repay.execute,
@@ -185,7 +186,7 @@ export function useRepay() {
  * Close position hook (for full repayment - closes entire position)
  */
 export function useClosePositionHook() {
-    const close = useClosePosition();
+    const close = useClosePositionCRE();
 
     return {
         execute: close.execute,

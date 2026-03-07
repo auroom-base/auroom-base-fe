@@ -22,6 +22,7 @@ import {
 import { parseRupiahInput } from '@/lib/utils/format';
 import { type LoanFlowState, generateReferenceNumber } from '@/lib/utils/loanFlow';
 import { VerificationBanner } from '@/components/shared/VerificationBanner';
+import { WrongNetworkBanner } from '@/components/shared/WrongNetworkBanner';
 
 export default function CashLoanPage() {
     const router = useRouter();
@@ -75,10 +76,12 @@ export default function CashLoanPage() {
 
     const needsApproval = xautApproval.allowance < calculation.collateralRequired;
 
-    // Handle approve
+    // Handle approve — approve 5× collateral needed so one approval covers multiple sessions.
+    // Exact amount gets consumed by depositAndBorrow, requiring re-approval every time.
     const handleApprove = () => {
-        xautApproval.approve(BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'));
+        xautApproval.approve(calculation.collateralRequired * 5n);
     };
+
 
     // Handle borrow
     const handleBorrow = () => {
@@ -179,6 +182,9 @@ export default function CashLoanPage() {
                     </h1>
                     <p className="text-white/60">Secure your digital gold, receive cash to your bank account</p>
                 </div>
+
+                {/* Network guard */}
+                <WrongNetworkBanner />
 
                 {/* Verification Banner */}
                 <VerificationBanner />

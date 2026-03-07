@@ -52,11 +52,10 @@ export function Header() {
                         {/* Desktop Navigation */}
                         {isConnected && (<nav className="hidden md:flex items-center space-x-6">
                             <Link
-                                href="/swap"
+                                href="/faucet"
                                 className="text-base font-medium text-white/80 hover:text-yellow-400 transition-colors flex items-center gap-1"
                             >
-                                {/* <ArrowUpDown className="w-4 h-4" /> */}
-                                Swap
+                                Faucet
                             </Link>
                             <Link
                                 href="/cash-loan"
@@ -71,10 +70,10 @@ export function Header() {
                                 My Loans
                             </Link>
                             <Link
-                                href="/verify"
+                                href="/kyc"
                                 className="text-base font-medium text-white/80 hover:text-yellow-400 transition-colors"
                             >
-                                Verify
+                                KYC
                             </Link>
                         </nav>)}
 
@@ -126,12 +125,12 @@ export function Header() {
                             {/* Mobile Menu Items */}
                             {isConnected && (<>
                                 <Link
-                                    href="/swap"
+                                    href="/faucet"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="block text-center py-6 text-xl font-bold text-white transition-all duration-300"
                                 >
                                     <span>
-                                        Swap
+                                        Faucet
                                     </span>
                                 </Link>
 
@@ -152,11 +151,11 @@ export function Header() {
                                 </Link>
 
                                 <Link
-                                    href="/verify"
+                                    href="/kyc"
                                     onClick={() => setIsMobileMenuOpen(false)}
                                     className="block text-center py-6 text-xl font-bold text-white transition-all duration-300"
                                 >
-                                    Verify
+                                    KYC
                                 </Link>
                             </>)}
 

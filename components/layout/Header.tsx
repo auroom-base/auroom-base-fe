@@ -30,10 +30,10 @@ export function Header() {
                     {isConnected && (
                         <nav className="hidden md:flex items-center space-x-6">
                             <Link
-                                href="/swap"
+                                href="/faucet"
                                 className="text-sm font-medium text-white/80 hover:text-yellow-400 transition-colors"
                             >
-                                Swap
+                                Faucet
                             </Link>
                             <Link
                                 href="/cash-loan"
