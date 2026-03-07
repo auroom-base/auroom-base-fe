@@ -130,6 +130,195 @@ graph TD
     RPC -->|Read/Write| Blockchain
 ```
 
+### Detailed Architecture Diagrams
+
+#### 1. Component Relationship Map
+
+```mermaid
+graph TB
+    subgraph FE["Frontend (Next.js 16)"]
+        UI["User Interface\nWallet Connect · Cash Loan · My Loans · Faucet"]
+        HOOKS["Wagmi Hooks\nuseDepositAndBorrow · useRepay · useKYC"]
+        PREFLIGHT["Pre-flight UI\nPreflightCard · useSimulateDeposit · useSimulateRepay"]
+    end
+
+    subgraph BE["Backend API (Next.js Routes)"]
+        SIM_D["/api/simulate/deposit"]
+        SIM_R["/api/simulate/repay"]
+        KYC["/api/kyc/status\n/api/kyc/submit"]
+        FAUCET["/api/faucet/mint"]
+        FUND["/api/fund"]
+    end
+
+    subgraph SC["Smart Contracts (Base Sepolia 84532)"]
+        BP["BorrowingProtocolCRE\n0x4a5a42..."]
+        IR["IdentityRegistryV2\n0x655b16..."]
+        XAUT["XAUT Token\n0x56EeDF..."]
+        IDRX["IDRX Token\n0x998ceB..."]
+    end
+
+    subgraph TENDERLY["Tenderly"]
+        T_SIM["REST Simulation API\napi.tenderly.co/simulate\nnetwork_id: 84532"]
+        T_VTN["Virtual TestNet\nDev sandbox only"]
+        T_DASH["Dashboard\nSimulation traces"]
+    end
+
+    subgraph CRE["Chainlink CRE Workflow"]
+        CRE_CRON["Cron Trigger\nEvery 15 min"]
+        CRE_PRICES["Price Aggregator\nBybit · OKX · Kraken\nmetals.dev · goldapi.io"]
+        CRE_ORACLE["setXAUTPrice()\nWeighted median → on-chain"]
+    end
+
+    %% FE ↔ BE
+    UI -->|"KYC check on connect"| KYC
+    PREFLIGHT -->|"simulate before signing"| SIM_D
+    PREFLIGHT -->|"simulate before signing"| SIM_R
+    UI -->|"Mint 0.01 XAUT"| FAUCET
+    UI -->|"Auto ETH top-up"| FUND
+
+    %% FE ↔ SC (direct via wagmi)
+    HOOKS -->|"depositAndBorrow()\nrepayAndWithdraw()"| BP
+    HOOKS -->|"getKycLevel()"| IR
+    HOOKS -->|"balanceOf() · approve()"| XAUT
+
+    %% BE ↔ Tenderly
+    SIM_D -->|"POST /simulate\nX-Access-Key"| T_SIM
+    SIM_R -->|"POST /simulate\nX-Access-Key"| T_SIM
+    T_SIM -->|"Reads real state"| SC
+    T_SIM -->|"Saves trace"| T_DASH
+
+    %% BE ↔ SC
+    KYC -->|"getKycLevel()\nBase Sepolia RPC"| IR
+    FAUCET -->|"XAUT.mint()\nadmin wallet"| XAUT
+    FUND -->|"ETH transfer\nadmin wallet"| SC
+
+    %% CRE ↔ SC
+    CRE_CRON --> CRE_PRICES
+    CRE_PRICES -->|"Weighted median"| CRE_ORACLE
+    CRE_ORACLE -->|"setXAUTPrice()\non Base Sepolia"| BP
+
+    %% SC internal
+    BP -->|"transferFrom()"| XAUT
+    BP -->|"mint() IDRX to user"| IDRX
+    BP -->|"getKycLevel()"| IR
+
+    style TENDERLY fill:#1a1a2e,stroke:#6366f1,color:#a5b4fc
+    style CRE fill:#1a2e1a,stroke:#22c55e,color:#86efac
+    style FE fill:#1e1a2e,stroke:#f59e0b,color:#fcd34d
+    style BE fill:#1e2a1a,stroke:#64748b,color:#94a3b8
+    style SC fill:#2e1a1a,stroke:#ef4444,color:#fca5a5
+```
+
+#### 2. Tenderly Integration Detail
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend
+    participant API as /api/simulate/*
+    participant T as Tenderly REST API
+    participant Chain as Base Sepolia
+
+    User->>FE: Enter loan amount
+    FE->>FE: Debounce 600ms
+    FE->>API: POST {from, collateralAmount, borrowAmount}
+    
+    API->>T: POST /simulate<br/>network_id: 84532<br/>X-Access-Key: ***
+    T->>Chain: Read real state<br/>(approvals, KYC, balances)
+    Chain-->>T: State snapshot
+    T->>T: Run EVM simulation
+    T-->>API: {status, gas_used, error_info}
+    
+    API-->>FE: {success, gasUsed, revertReason}
+    FE->>User: PreflightCard green / shows revert reason
+
+    User->>FE: Click "Get Loan"
+    FE->>User: MetaMask sign prompt
+    User->>Chain: Submit real tx
+```
+
+#### 3. Chainlink CRE Workflow Integration
+
+```mermaid
+sequenceDiagram
+    participant CRON as CRE Cron Trigger<br/>(every 15 min)
+    participant WF as gold-price-feed<br/>workflow
+    participant EX as Price Sources<br/>Bybit · OKX · Kraken<br/>metals.dev · goldapi.io
+    participant DON as Chainlink DON<br/>Nodes
+    participant SC as BorrowingProtocolCRE<br/>Base Sepolia
+
+    CRON->>WF: Trigger
+    WF->>EX: Fetch XAUT/USD prices (parallel)
+    EX-->>WF: 5 price feeds
+    WF->>WF: Weighted median<br/>3x CEX + 1x metals.dev + 1x goldapi
+    WF->>WF: USD to IDRX conversion<br/>(FX rate from config)
+    WF->>DON: Consensus report<br/>xautPriceInIDRX (8 decimals)
+    DON->>SC: setXAUTPrice(price)
+    SC->>SC: Update collateral ratio for all loans
+```
+
+#### 4. Full Transaction Lifecycle
+
+```mermaid
+flowchart LR
+    subgraph UX["User Journey"]
+        A([Connect Wallet]) --> B[Faucet: Get XAUT]
+        B --> C[Cash Loan Page]
+        C --> D{KYC Level?}
+        D -->|"Level 0: Guest"| E["Limited: Rp 5M max"]
+        D -->|"Level 2: Enhanced"| F[Unlimited]
+        E & F --> G[Enter loan amount]
+        G --> H["Pre-flight Simulation\n(Tenderly REST API)"]
+        H -->|Pass| I["Approve XAUT\n(MetaMask)"]
+        H -->|Fail + reason| G
+        I --> J["depositAndBorrow\n(MetaMask)"]
+        J --> K([IDRX in wallet])
+        K --> L[My Loans: Repay]
+        L --> M["Repay Simulation\n(Tenderly REST API)"]
+        M -->|Pass| N["repayAndWithdraw\n(MetaMask)"]
+        N --> O([XAUT returned])
+    end
+
+    subgraph LIVE["Live Gold Rate"]
+        CRE["Chainlink CRE\n15 min interval"] -->|setXAUTPrice| PRICE["On-chain XAUT price\nshown in UI"]
+        PRICE --> G
+    end
+```
+
+#### 5. Off-chain Settlement Flow
+
+```mermaid
+sequenceDiagram
+    actor User
+    participant FE as Frontend
+    participant API as /api/redeem/*
+    participant IDRX_API as IDRX Protocol API
+    participant BANK as Indonesian Bank
+    participant SC as Smart Contracts
+
+    Note over User,SC: On-chain phase (Base Sepolia)
+    User->>SC: repayAndWithdraw()
+    SC->>User: XAUT returned
+    SC->>SC: IDRX burned from user
+
+    Note over User,BANK: Off-chain settlement phase
+    User->>FE: Enter bank account + amount
+    FE->>FE: Check amount vs 250M IDR limit
+
+    alt Self-service (amount <= Rp 250M)
+        FE->>API: POST /api/redeem/self-service
+        API->>IDRX_API: submitRedeemRequest(txHash, amount, bankAccount)
+        IDRX_API->>BANK: IDR bank transfer
+        BANK-->>User: IDR in account (fast)
+    else Treasury-assisted (amount > Rp 250M)
+        FE->>API: POST /api/redeem/treasury-assisted
+        API->>IDRX_API: submitTreasuryAssistedRequest(amount, bankAccount)
+        IDRX_API-->>API: queued (est. 24 hours)
+        IDRX_API->>BANK: IDR bank transfer (manual review)
+        BANK-->>User: IDR in account (within 24h)
+    end
+```
+
 ---
 
 ## ️ Tech Stack
