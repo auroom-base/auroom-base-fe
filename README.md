@@ -87,47 +87,71 @@
 - **Debug**: View balances, allowances, contract info
 
 ---
-## Architecure Diagram
+## Architecture (5 Layers)
+
+AuRoom is organized into 5 production layers used in the demo flow:
+
+1. Frontend App (Next.js)
+2. Smart Contracts (Base Sepolia)
+3. Backend API (Next.js routes)
+4. Tenderly (pre-flight simulation + traces)
+5. Chainlink CRE Workflows (price feed + liquidation guardian)
 
 ```mermaid
-graph TD
-    subgraph Client ["Client Side (Browser)"]
-        UI["User Interface <br/>(Next.js / React 19)"]
-        Store["Local Storage <br/>(KYC Progress)"]
-        Wallet["Web3 Wallet <br/>(RainbowKit / Wagmi)"]
-        
-        UI -->|Reads/Writes| Store
-        UI -->|Connects| Wallet
+graph TB
+    subgraph L1["Layer 1 — Frontend App (Next.js 16)"]
+        UI["UI: Landing · Cash Loan · My Loans · Redeem"]
+        HOOKS["Wagmi Hooks: depositAndBorrow · repayAndWithdraw · KYC"]
+        PREFLIGHT["Pre-flight UX: simulate before wallet signing"]
     end
 
-    subgraph Server ["Server Side (Next.js API Routes)"]
-        Proxy["Secure Proxy API <br/>(/api/redeem)"]
-        Secrets[("Environment Variables <br/> API Keys & Secrets")]
-        
-        Proxy -.->|Reads| Secrets
+    subgraph L2["Layer 2 — Smart Contracts (Base Sepolia 84532)"]
+        BP["BorrowingProtocolCRE"]
+        IR["IdentityRegistryV2"]
+        XAUT["XAUT collateral token"]
+        IDRX["IDRX stablecoin"]
     end
 
-    subgraph Blockchain ["Blockchain Layer (Base Sepolia)"]
-        SC_Borrow["Borrowing Protocol V2"]
-        SC_Swap["Swap Router"]
-        Tokens["Tokens <br/>(IDRX, XAUT, USDC)"]
-        
-        Wallet -->|Transactions| SC_Borrow
-        Wallet -->|Transactions| SC_Swap
-        SC_Borrow -->|Interacts| Tokens
+    subgraph L3["Layer 3 — Backend API (Next.js Routes)"]
+        SIM_D["/api/simulate/deposit"]
+        SIM_R["/api/simulate/repay"]
+        KYC["/api/kyc/*"]
+        REDEEM["/api/redeem/*"]
+        FAUCET["/api/faucet/mint + /api/fund"]
+        IDRX_API["IDRX Protocol API (bank settlement)"]
     end
 
-    subgraph External ["External Services"]
-        IDRX_API["IDRX Banking API <br/>(Off-ramp / Redeem)"]
-        RPC["RPC Provider"]
+    subgraph L4["Layer 4 — Tenderly"]
+        T_SIM["REST Simulation API (network_id: 84532)"]
+        T_DASH["Simulation Dashboard (saved traces)"]
     end
 
-    %% Flows
-    UI -->|"HTTPS Request (Public Data)"| Proxy
-    Proxy -->|"Signed Request (HMAC)"| IDRX_API
-    
-    Wallet -->|"RPC Calls"| RPC
-    RPC -->|Read/Write| Blockchain
+    subgraph L5["Layer 5 — Chainlink CRE Workflows"]
+        CRE_PF["Gold Price Feed Workflow"]
+        CRE_LG["Liquidation Guardian Workflow"]
+    end
+
+    UI --> HOOKS
+    UI --> PREFLIGHT
+    UI --> KYC
+    UI --> REDEEM
+    UI --> FAUCET
+
+    HOOKS -->|"deposit/repay tx"| BP
+    HOOKS -->|"getKycLevel"| IR
+    HOOKS -->|"approve/balance"| XAUT
+    BP -->|"mint/burn"| IDRX
+
+    PREFLIGHT --> SIM_D
+    PREFLIGHT --> SIM_R
+    SIM_D -->|"POST /simulate"| T_SIM
+    SIM_R -->|"POST /simulate"| T_SIM
+    T_SIM -->|"trace output"| T_DASH
+
+    REDEEM --> IDRX_API
+
+    CRE_PF -->|"setXAUTPrice()"| BP
+    CRE_LG -->|"liquidate(user)"| BP
 ```
 
 ### Detailed Architecture Diagrams
